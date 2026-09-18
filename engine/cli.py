@@ -326,6 +326,36 @@ def cmd_validate(args):
     print("  ✅ 预检通过，可以开始渲染。")
     return True
 
+def cmd_inspect(args):
+    """画面层体检：确定性布局检查 + 按幕抽帧供人工目视。"""
+    target = resolve_project_path(args.project)
+    from engine.compositor import VideoCompositor
+    from engine.visual_qa import analyze_storyboard
+
+    compositor = VideoCompositor(target, root_dir=ROOT_DIR)
+    report = analyze_storyboard(compositor.spec)
+
+    print(f"🔬 画面体检: {target}")
+    print(f"  • 检查场景数: {report['checked_scenes']}")
+    if report["static_scenes"]:
+        print(f"  • 静态场景: {', '.join(report['static_scenes'])}")
+    for issue in report["blocking_issues"]:
+        print(f"  ❌ {issue}")
+    for warning in report["warnings"]:
+        print(f"  ⚠️ {warning}")
+
+    if args.no_frames:
+        print("  ℹ️ 已跳过抽帧（--no-frames）")
+    else:
+        written = compositor.sample_scene_frames()
+        print(f"  🖼️ 已抽取 {len(written)} 张检查帧: {os.path.dirname(written[0]) if written else '(无场景)'}")
+
+    if report["blocking_issues"]:
+        print("❌ 画面体检未通过：请修复上述布局问题后再发布。")
+        return False
+    print("  ✅ 画面体检通过。")
+    return True
+
 def main():
     parser = argparse.ArgumentParser(description="VideoAgent CLI - 模块化视频生产管线")
     subparsers = parser.add_subparsers(dest="command", help="子命令")
@@ -376,6 +406,11 @@ def main():
     p_validate.add_argument("--allow-placeholders", action="store_true", help="允许素材占位场景，仅用于制作期预览")
     p_validate.add_argument("--allow-low-quality", action="store_true", help="允许质量分低于门槛，仅用于内部预览")
 
+    # inspect
+    p_inspect = subparsers.add_parser("inspect", help="画面层体检：布局遮挡检查并按幕抽帧")
+    p_inspect.add_argument("project", help="工程名称或目录路径")
+    p_inspect.add_argument("--no-frames", action="store_true", help="只做静态检查，不抽取检查帧")
+
     args = parser.parse_args()
     if not args.command:
         parser.print_help()
@@ -395,6 +430,9 @@ def main():
         cmd_status(args)
     elif args.command == "validate":
         if not cmd_validate(args):
+            sys.exit(1)
+    elif args.command == "inspect":
+        if not cmd_inspect(args):
             sys.exit(1)
 
 if __name__ == "__main__":

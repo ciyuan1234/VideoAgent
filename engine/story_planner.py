@@ -242,13 +242,15 @@ def placeholder_scene(request: Dict[str, str], narration: str) -> Dict[str, Any]
 
 def _cinematic_scene(scene_id: str, narration: str, visual_type: str, asset: Dict[str, Any],
                      purpose: str) -> Dict[str, Any]:
+    # label 画在左下角、与居中字幕同一横带，必须是短语，否则会遮挡字幕（见 engine/visual_qa.py）。
+    short_label = purpose if len(purpose) <= 16 else "查看关键操作与结果"
     visual = {
         "type": visual_type,
         "presentation": "cinematic",
         "file": asset["file"],
         "beats": [
             {"at": 0.0, "focus": [0.5, 0.45], "scale": 1.04, "label": "建立全局上下文", "accent": "indigo"},
-            {"at": 0.55, "focus": [0.5, 0.70], "scale": 1.28, "label": purpose, "accent": "emerald"},
+            {"at": 0.55, "focus": [0.5, 0.70], "scale": 1.28, "label": short_label, "accent": "emerald"},
         ],
     }
     if visual_type == "video_clip":

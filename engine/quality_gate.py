@@ -241,6 +241,13 @@ def evaluate_storyboard(spec: Dict[str, Any], threshold: int = DEFAULT_QUALITY_T
         warnings.extend(result.get("warnings", []))
         suggestions.extend(result.get("suggestions", []))
 
+    # 画面层体检：布局遮挡、镜头跳回、callout 越界属于硬缺陷，直接阻断。
+    from engine.visual_qa import analyze_storyboard
+
+    visual = analyze_storyboard(spec)
+    blocking.extend(visual["blocking_issues"])
+    warnings.extend(visual["warnings"])
+
     if scenes and len(scenes) < 3:
         blocking.append(f"场景数只有 {len(scenes)} 幕，少于最低要求 3 幕")
 

@@ -180,6 +180,7 @@ class VideoCompositor:
         self.sfx_conf = meta.get("sfx", {"enabled": True})
 
         self.sprites = {}
+        self._label_budget_cache = {}
         # 视频素材只保留抽帧路径；按需读取，避免长素材将内存撑满。
         self.video_clips = {}
         self._video_frame_cache = {}
@@ -1272,6 +1273,7 @@ class VideoCompositor:
     # ----------------- 镜头节拍：真实截图 / 视频素材的动态聚焦 -----------------
     def _cinematic_beat(self, visual, local_f, total_scene_frames):
         """返回当前镜头节拍，并在相邻节拍间平滑移动焦点。"""
+        """返回当前镜头节拍，并在相邻节拍间平滑移动焦点。"""
         beats = visual.get("beats") or [{"at": 0.0, "focus": [0.5, 0.5], "scale": 1.0}]
         beats = sorted(beats, key=lambda beat: float(beat.get("at", 0.0)))
         progress = min(1.0, max(0.0, local_f / float(max(1, total_scene_frames - 1))))
@@ -1292,6 +1294,21 @@ class VideoCompositor:
         next_scale = float(next_beat.get("scale", current_scale))
         scale = current_scale + (next_scale - current_scale) * travel
         return current_index, current, focus, max(1.0, scale)
+
+    def _fit_cinematic_label(self, scene, label):
+        """把左下角标签限制在字幕胶囊之外；超长时截断并加省略号。
+
+        预算按幕缓存，避免逐帧重算字幕宽度影响渲染速度。
+        """
+        scene_id = scene.get("id", "scene")
+        if scene_id not in self._label_budget_cache:
+            from engine.visual_qa import label_safe_width
+
+            narration = (scene.get("audio") or {}).get("text") or scene.get("voice_text") or ""
+            self._label_budget_cache[scene_id] = label_safe_width(narration, self.width)
+        from engine.visual_qa import fit_label_to_width
+
+        return fit_label_to_width(label, self._label_budget_cache[scene_id])
 
     def _render_cinematic_asset(self, scene, local_f, global_f, total_scene_frames, asset):
         """将截图或视频帧作为主画面，并按 beats 完成推镜、平移和标注。"""
@@ -1332,6 +1349,7 @@ class VideoCompositor:
         draw.text((42, 22), f"SCREEN WALKTHROUGH  ·  {beat_index + 1:02d}", font=font_meta, fill=(203, 213, 225, 255))
         label = beat.get("label") or visual.get("header_title", "")
         if label:
+            label = self._fit_cinematic_label(scene, label)
             draw.text((42, self.height - 91), label, font=font_label, fill=(248, 250, 252, 255))
 
         # callout 使用原始素材的归一化坐标，镜头移动时会和被讲解的 UI 元素一起移动。
@@ -1939,6 +1957,52 @@ class VideoCompositor:
         """返回当前剧本的质量报告（不写文件、不渲染）。"""
         from engine.quality_gate import DEFAULT_QUALITY_THRESHOLD, evaluate_storyboard
         return evaluate_storyboard(self.spec, threshold or DEFAULT_QUALITY_THRESHOLD)
+
+    def sample_scene_frames(self, output_dir=None, fractions=(0.0, 0.5, 1.0)):
+        """按幕抽取首/中/末帧用于目视质检；时长与字幕按逐句估算，不调用 TTS。
+
+        字幕在 build() 的时间轴循环里叠加，因此这里必须补画，否则检查帧与成片不一致。
+        """
+        from engine.tts_engine import split_sentences
+        from engine.visual_qa import estimate_scene_seconds
+
+        # QA 抽帧与人工策展的展示图分开存放，避免互相覆盖。
+        out_dir = output_dir or os.path.join(self.dist_dir, "inspect", "qa")
+        os.makedirs(out_dir, exist_ok=True)
+        self.prepare_visual_assets()
+
+        def sentence_timeline(scene):
+            audio_conf = scene.get("audio", {}) or {}
+            text = str(audio_conf.get("text") or scene.get("voice_text") or "")
+            speed = float(audio_conf.get("speed") or 1.05)
+            pause = float(audio_conf.get("pause") or 0.35)
+            timeline = []
+            cursor = 0.0
+            for sentence in split_sentences(text):
+                duration = len(sentence) / (4.5 * max(0.5, speed))
+                timeline.append((cursor, cursor + duration, sentence))
+                cursor += duration + pause
+            return timeline
+
+        written = []
+        for scene in self.spec.get("scenes", []):
+            scene_id = scene.get("id", "scene")
+            total_frames = max(1, int(estimate_scene_seconds(scene) * self.fps))
+            timeline = sentence_timeline(scene)
+            visual_type = scene.get("layout") or (scene.get("visual") or {}).get("type")
+            center_x = 640 if visual_type == "title_card" else None
+            for fraction in fractions:
+                frame_index = min(total_frames - 1, int(total_frames * fraction))
+                frame = self.render_scene_frame(scene, frame_index, frame_index, total_frames)
+                seconds = frame_index / float(self.fps)
+                for start, end, sentence in timeline:
+                    if start <= seconds < end:
+                        frame = self.render_subtitle_pill(frame, sentence, 1.0, 1.0, center_x=center_x)
+                        break
+                path = os.path.join(out_dir, f"{scene_id}_{int(round(fraction * 100)):03d}.png")
+                frame.save(path)
+                written.append(path)
+        return written
 
     def build(self, allow_placeholders=False, allow_low_quality=False):
         print(f"🚀 开始编译工程: {self.project_dir}")

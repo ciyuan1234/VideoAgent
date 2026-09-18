@@ -11,6 +11,8 @@ __pycache__/
 # Rendered deliverables: 只把轻量封面/截图留在版本库，成片走 Release 或对象存储
 **/dist/final.mp4
 **/dist/inspect/*.mp4
+# 画面体检抽帧属于诊断产物，不入库（dist/inspect/ 根目录保留人工策展的展示图）
+**/dist/inspect/qa/
 
 # macOS system files
 .DS_Store

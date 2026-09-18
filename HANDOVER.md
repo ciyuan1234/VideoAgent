@@ -384,6 +384,16 @@ curl -s http://127.0.0.1:9880/control | grep -q "message" && echo "✅ GPT-SoVIT
 
 ### 回归测试
 
+### 画面体检（`video-cli inspect`）
+
+内容层的质量门禁看不到画面，因此单独提供 `engine/visual_qa.py`：纯函数、只依据 storyboard 与渲染器的布局常量判断，不引入图像模型。
+
+- 阈值来源：`_render_cinematic_asset` 把 `label` 画在 `(42, height-91)`、字号 30；`render_subtitle_pill` 字号 28、左右各 32 内边距、超过 24 字折行、默认水平居中。两者共享同一条底部横带，因此标签宽度与字幕胶囊宽度会直接竞争。
+- **字幕逐句显示**，所以估算必须用 `tts_engine.split_sentences()` 逐句取最宽胶囊，不能用整幕台词——早期用整幕台词估算会误报「字幕超出画面」。
+- 渲染器侧已有兜底：`_fit_cinematic_label()` 会把超长标签截断并加省略号，保证任何剧本都不会出现遮挡；体检仍会报错，因为被截断意味着文案需要改短。预算按幕缓存，不影响渲染速度。
+- `sample_scene_frames()` 按字数估算时长与逐句字幕并补画字幕（成片字幕是在 `build()` 的时间轴循环里叠加的），因此检查帧与成片一致。产物写入 `dist/inspect/qa/`，该目录已在 `.gitignore` 中排除；`dist/inspect/` 根目录只存放 README 引用的人工策展展示图，**不要**把抽帧直接写进根目录（曾因此误删过展示图）。
+- 历史工程（无 `story_profile`）只提示不阻断；新导演剧本的画面问题会并入质量报告的 `blocking_issues`。
+
 ```bash
 # 全部用例（标准库 unittest，无需额外依赖）
 PYTHONPYCACHEPREFIX=/tmp/videoagent-pycache python -m unittest discover -s tests -t .

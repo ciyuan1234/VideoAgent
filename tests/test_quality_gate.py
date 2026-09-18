@@ -14,6 +14,7 @@ def scene(scene_id, visual, narration="这是一段用于质量评估的普通�
     payload = {
         "id": scene_id,
         "transition": "cut",
+        "camera": {"motion": "zoom_in"},
         "audio": {"text": narration, "speed": 1.0, "pause": 0.3, "emotion": "normal"},
         "visual": visual,
     }

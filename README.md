@@ -256,6 +256,7 @@ scenes:
 | `auto-generate` | **端到端一键成片** | `./video-cli auto-generate demo --topic "epoll" --model gemini-1.5-flash` |
 | `init` | 初始化新建视频工程骨架 | `./video-cli init my_video --title "Rust入门指南"` |
 | `validate` | 剧本质量门禁与素材依赖校验 | `./video-cli validate my_video` |
+| `inspect` | 画面体检：布局遮挡检查 + 按幕抽帧 | `./video-cli inspect my_video` |
 | `build` | 编译渲染成 1080P 高清成片 | `./video-cli build my_video` |
 | `list` | 查看当前工作区所有工程状态 | `./video-cli list` |
 | `status` | 查看指定工程标题、幕数与交付状态 | `./video-cli status my_video` |
@@ -296,6 +297,27 @@ python -m tests.update_snapshots
 ```
 
 `tests/fixtures/` 存放固定输入，`tests/snapshots/` 存放剧本指纹基线（profile、variant、节拍、场景 id、镜头序列、素材请求与 evidence 标记），不含任何二进制产物。
+
+---
+
+## 🔍 画面体检 (Visual QA)
+
+内容层合格不代表画面层没问题。`inspect` 会做确定性布局检查，并把每幕的首/中/末帧（含字幕）抽到 `dist/inspect/qa/` 供人工目视（该目录不入库，`dist/inspect/` 根目录保留人工策展的展示图）：
+
+```bash
+./video-cli inspect my_video            # 静态检查 + 抽帧（9 张/3 幕）
+./video-cli inspect my_video --no-frames  # 只做静态检查
+```
+
+检查项来自渲染器的真实布局常量，而不是经验猜测：
+
+- **字幕遮挡**：左下角镜头标签不得侵入居中字幕胶囊；超长标签在渲染时会被强制截断并加省略号，同时体检报错要求作者缩短。
+- **callout 越界 / 过小**：标注框必须落在素材归一化范围内且不低于 4% 边长。
+- **镜头跳回**：`beats[].at` 必须递增，首帧应从 0 开始。
+- **静态镜头**：既无 `camera.motion` 也无 `beats` 的场景会被点名；全片皆静态则直接阻断。
+- **标签重复**：同一标签在多幕复用会提示，避免节拍失去区分度。
+
+> 抽帧时按字数估算时长与逐句字幕（不调用 TTS），因此检查帧与成片高度一致，可快速定位遮挡、越界类问题。
 
 ---
 
