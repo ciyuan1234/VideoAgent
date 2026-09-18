@@ -1,0 +1,13 @@
+{
+  "story_profile": "concept",
+  "story_variant": "mechanism_first",
+  "content": {
+    "source_type": "file",
+    "title": "渲染管线缩放说明",
+    "raw_text": "输出规格为 1920x1080。讲解时镜头从 1.0x 平滑推进到 1.08x，转场时长 0.45 秒。",
+    "headings": ["输出规格", "镜头推进"],
+    "bullets": ["变焦倍率不是性能指标"],
+    "code_snippets": [],
+    "available_assets": []
+  }
+}

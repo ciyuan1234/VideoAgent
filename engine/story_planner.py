@@ -37,8 +37,48 @@ PROFILE_TAG = {
     "decision": "方案决策",
 }
 
-METRIC_PATTERN = r"(?<![\w.])(\d+(?:\.\d+)?)\s*(QPS|TPS|RPS|ms|MB|GB|%|倍|x)(?!\w)"
-METRIC_PATTERN_LOOSE = r"(\d+(?:\.\d+)?)\s*(QPS|TPS|RPS|ms|MB|GB|%|倍|x)"
+# 只有这些单位能独立证明“这是一个可复核的量化指标”。
+STRONG_METRIC_UNITS = {"QPS", "TPS", "RPS", "ms", "MB", "GB", "KB", "%"}
+# 这些单位本身有歧义（变焦倍率、分辨率、循环次数都会用到），必须邻近性能语境才算指标。
+AMBIGUOUS_METRIC_UNITS = {"x", "倍"}
+METRIC_UNIT_CANONICAL = {
+    "qps": "QPS", "tps": "TPS", "rps": "RPS",
+    "ms": "ms", "mb": "MB", "gb": "GB", "kb": "KB",
+    "%": "%", "x": "x", "倍": "倍",
+}
+# 「放大到 1.08x」「1920x1080」等非性能用法需要被排除。
+RESOLUTION_PATTERN = re.compile(r"\d+(?:\.\d+)?\s*[x×]\s*\d+", re.IGNORECASE)
+METRIC_CONTEXT_WORDS = (
+    "性能", "提升", "降低", "吞吐", "延迟", "压测", "基准", "优化",
+    "提速", "倍速", "更快", "更慢", "响应", "耗时", "下降", "增长",
+)
+METRIC_PATTERN = re.compile(
+    r"(?<![\w.])(\d+(?:\.\d+)?)\s*(QPS|TPS|RPS|ms|MB|GB|KB|%|倍|x)(?!\w)",
+    re.IGNORECASE,
+)
+
+
+def extract_metrics(raw_text: str) -> List[Dict[str, Any]]:
+    """只提取可复核的量化指标，排除变焦倍率、分辨率等无关数字。
+
+    返回 `[{"value": float, "unit": str, "raw": str}]`，保持首次出现顺序并去重。
+    """
+    text = RESOLUTION_PATTERN.sub(" ", str(raw_text))
+    collected: List[Dict[str, Any]] = []
+    seen = set()
+    for match in METRIC_PATTERN.finditer(text):
+        raw_value, raw_unit = match.group(1), match.group(2)
+        unit = METRIC_UNIT_CANONICAL.get(raw_unit.lower(), raw_unit)
+        if unit in AMBIGUOUS_METRIC_UNITS:
+            window = text[max(0, match.start() - 24):match.end() + 24]
+            if not any(word in window for word in METRIC_CONTEXT_WORDS):
+                continue
+        raw = f"{raw_value} {unit}"
+        if raw in seen:
+            continue
+        seen.add(raw)
+        collected.append({"value": float(raw_value), "unit": unit, "raw": raw})
+    return collected
 
 
 def analyze_content_signals(content: Dict[str, Any]) -> Dict[str, Any]:
@@ -58,7 +98,10 @@ def analyze_content_signals(content: Dict[str, Any]) -> Dict[str, Any]:
     scores["code_walkthrough"] = len(code_snippets) * 4 + sum(
         token in corpus for token in ("源码", "代码", "函数", "实现", "api", "class")
     )
-    metric_matches = re.findall(METRIC_PATTERN, raw_text, re.IGNORECASE)
+    metrics = extract_metrics(raw_text)
+    has_strong_metric = any(metric["unit"] in STRONG_METRIC_UNITS for metric in metrics)
+    # 至少两个指标、且其中一个是无歧义单位，才允许生成图表。
+    has_explicit_metrics = len(metrics) >= 2 and has_strong_metric
     facts = [item for item in [*headings, *bullets] if item.strip()][:6]
     return {
         "title": title,
@@ -66,8 +109,9 @@ def analyze_content_signals(content: Dict[str, Any]) -> Dict[str, Any]:
         "facts": facts,
         "code_snippets": code_snippets,
         "scores": scores,
-        "metric_evidence": [f"{value} {unit}" for value, unit in metric_matches[:4]],
-        "has_explicit_metrics": len(metric_matches) >= 2,
+        "metrics": metrics,
+        "metric_evidence": [metric["raw"] for metric in metrics[:4]],
+        "has_explicit_metrics": has_explicit_metrics,
         "source_type": content.get("source_type", "topic"),
         "assets": list(content.get("available_assets", []) or []),
     }
@@ -234,6 +278,11 @@ def scene_from_beat(beat: Dict[str, Any], plan: Dict[str, Any]) -> Dict[str, Any
         "transition": "slide_left",
         "audio": {"text": "", "speed": 1.0, "pause": 0.35, "emotion": "calm"},
     }
+    # 运镜按节拍意图分配：开场冲击、解释推进、收束安静；真实素材镜头由 cinematic beats 自行运动。
+    if beat_id == "hook":
+        base["camera"] = {"motion": "zoom_punch"}
+    elif beat_id in {"source", "mechanism", "workflow", "metrics", "comparison"}:
+        base["camera"] = {"motion": "zoom_in"}
 
     if beat_id == "hook":
         base.update({
@@ -273,10 +322,9 @@ def scene_from_beat(beat: Dict[str, Any], plan: Dict[str, Any]) -> Dict[str, Any
                       "metrics": {"label": "决策依据", "value": "真实约束"}},
         }
     elif beat_id == "metrics":
-        matches = re.findall(METRIC_PATTERN_LOOSE, signals.get("raw_text", ""), re.IGNORECASE)[:3]
         values = [
-            {"label": f"材料数据 {i + 1}", "value": float(value), "unit": unit, "theme": theme}
-            for i, ((value, unit), theme) in enumerate(zip(matches, ["blue", "amber", "green"]))
+            {"label": f"材料指标 {i + 1}", "value": metric["value"], "unit": metric["unit"], "theme": theme}
+            for i, (metric, theme) in enumerate(zip(signals.get("metrics", [])[:3], ["blue", "amber", "green"]))
         ]
         base["audio"]["text"] = "这组数据直接来自输入材料；解读前仍需核对测试条件。"
         base["visual"] = {"type": "chart_benchmark", "header_title": "材料提供的数据",

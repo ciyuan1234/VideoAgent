@@ -91,6 +91,40 @@ class StoryPlannerTest(unittest.TestCase):
                 else:
                     self.assertNotIn("chart_benchmark", visuals)
 
+    def test_zoom_and_resolution_are_not_treated_as_metrics(self):
+        # 回归：变焦倍率 1.0x/1.08x 与分辨率 1920x1080 曾被当作性能指标渲染成跑分图表。
+        text = "输出 1920x1080；镜头从 1.0x 推进到 1.08x。"
+        self.assertEqual(planner.extract_metrics(text), [])
+
+        spec = self.build("concept_ambiguous_numbers.json")
+        self.assertNotIn("chart_benchmark", storyboard_fingerprint(spec)["visuals"])
+        self.assertEqual(spec["meta"]["content_evidence"]["metrics"], [])
+
+    def test_performance_metrics_are_still_detected(self):
+        text = "压测结果：基线 1200 QPS，延迟 8 ms；优化后 5400 QPS，内存 64 MB。"
+        units = [metric["unit"] for metric in planner.extract_metrics(text)]
+        self.assertEqual(units, ["QPS", "ms", "QPS", "MB"])
+
+    def test_ambiguous_unit_needs_performance_context(self):
+        # 「提升 3 倍」有性能语境 → 保留；孤立倍率 → 丢弃。
+        self.assertEqual(
+            [m["unit"] for m in planner.extract_metrics("优化后吞吐提升 3 倍")], ["倍"]
+        )
+        self.assertEqual(planner.extract_metrics("缩放到 3 倍再看"), [])
+
+    def test_chart_requires_at_least_one_strong_unit(self):
+        # 只有两个歧义单位时不足以支撑图表。
+        signals = planner.analyze_content_signals(
+            {"title": "只有倍率", "raw_text": "性能提升 2 倍，性能再提升 3 倍"}
+        )
+        self.assertFalse(signals["has_explicit_metrics"])
+
+    def test_key_beats_carry_camera_motion(self):
+        spec = self.build("concept_with_metrics.json")
+        motions = [scene.get("camera", {}).get("motion") for scene in spec["scenes"]]
+        self.assertIn("zoom_punch", motions)
+        self.assertIn("zoom_in", motions)
+
     def test_no_fabricated_terminal_or_diff(self):
         for name in list_fixtures():
             with self.subTest(fixture=name):

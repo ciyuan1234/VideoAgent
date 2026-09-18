@@ -90,16 +90,24 @@ def _score_rhythm_variety(scenes: List[Dict[str, Any]]) -> Dict[str, Any]:
         (scene.get("camera") or {}).get("motion")
         for scene in scenes if isinstance(scene.get("camera"), dict) and (scene.get("camera") or {}).get("motion")
     ]
-    camera_points = 4
-    if len(motions) >= 3 and len(set(motions)) == 1:
+    suggestions: List[str] = []
+    if not motions:
+        # 全片没有任何虚拟摄像机配置，不应与“有镜头设计”拿同样的分。
+        camera_points = 2
+        suggestions.append("全片没有虚拟摄像机配置，建议为关键论证场景添加 camera.motion")
+    elif len(motions) >= 3 and len(set(motions)) == 1:
         camera_points = 1
+        suggestions.append("镜头运动高度单一，建议混合 zoom_in 与 zoom_punch")
+    else:
+        camera_points = 4
 
     score = max(0, min(maximum, transition_points + character_points + camera_points))
     return {
         "score": score, "max": maximum,
         "detail": (f"主导转场占比 {round(transition_ratio * 100)}%，"
                    f"角色出镜 {len(with_character)}/{len(scenes)} 幕，"
-                   f"独立镜头运动 {len(set(motions))} 种"),
+                   f"镜头运动 {len(motions)} 处 / {len(set(motions))} 种"),
+        "suggestions": suggestions,
     }
 
 
