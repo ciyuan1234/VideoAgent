@@ -1,0 +1,80 @@
+meta:
+  title: "Linux 高并发的秘密：深入浅出 epoll"
+  resolution: [1920, 1080]
+  fps: 30
+  theme: "white_grid"
+  speaker: "erii"
+  bgm:
+    file: "bgm.mp3"
+    volume: 0.10
+    fade_in: 1.5
+    fade_out: 2.0
+  sfx:
+    enabled: true
+
+scenes:
+  - id: "scene1_intro"
+    character_sticker: "erii_presenter"
+    audio:
+      text: "Sakura，欢迎来到我的计算机小课堂！今天我们来聊聊高并发的基石：Linux 的 epoll。"
+      speed: 1.05
+      pause: 0.45
+    visual:
+      type: "title_card"
+      tag: "LINUX 内核底层剖析"
+      title: "Linux 高并发的秘密：深入浅出 epoll"
+      subtitle: "从 select 轮询到 epoll 事件驱动的飞跃"
+      bullets:
+        - "深入拆解内核红黑树管理与就绪链表机制"
+        - "从 O(n) 线性轮询到 O(1) 事件触发的底层飞跃"
+        - "核心 API 解析：轻松搞定单机百万高并发网络连接"
+
+  - id: "scene2_kernel"
+    character_sticker: "erii_chibi_think"
+    audio:
+      text: "传统 select 每次都要轮询所有连接，效率很低；而 epoll 基于红黑树和就绪事件链表，通知效率直接拉满！"
+      speed: 1.05
+      pause: 0.45
+    visual:
+      type: "custom_nodes"
+      header_title: "一、内核机制：红黑树 + 就绪链表"
+      header_sub: "传统 select 遍历全部 O(n)，epoll 事件触发 O(1)"
+      nodes:
+        - title: "客户端并发连接"
+          sub: "100w Sockets"
+          theme: "white"
+        - title: "内核 epoll 红黑树"
+          sub: "高效管理 O(log N)"
+          theme: "blue"
+        - title: "就绪事件双向链表"
+          sub: "rdlist 就绪队列"
+          theme: "amber"
+        - title: "epoll_wait 返回"
+          sub: "用户态极速处理 O(1)"
+          theme: "green"
+
+  - id: "scene3_code"
+    character_sticker: "erii_chibi_happy"
+    audio:
+      text: "这就是单机支撑百万并发的核心秘密哦。"
+      speed: 1.05
+      pause: 0.45
+    visual:
+      type: "code"
+      header_title: "二、核心 API：epoll_create 与 epoll_wait"
+      header_sub: "事件发生内核直接唤醒用户态，单机轻松支撑百万并发"
+      lang: "c"
+      theme: "OneHalfLight"
+      spotlight_line: 10
+      code: |
+        int epfd = epoll_create1(0);
+        struct epoll_event ev, events[MAX_EVENTS];
+        ev.events = EPOLLIN;
+        ev.data.fd = listen_sock;
+        epoll_ctl(epfd, EPOLL_CTL_ADD, listen_sock, &ev);
+        while (1) {
+            int nfds = epoll_wait(epfd, events, MAX_EVENTS, -1);
+            for (int n = 0; n < nfds; ++n) {
+                // 唤醒就绪事件极速响应
+            }
+        }

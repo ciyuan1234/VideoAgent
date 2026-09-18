@@ -1,0 +1,18 @@
+{
+  "story_profile": "concept",
+  "story_variant": "mechanism_first",
+  "content": {
+    "source_type": "file",
+    "title": "网关性能压测记录",
+    "raw_text": "压测结果：基线 1200 QPS，延迟 8 ms；优化后 5400 QPS，延迟 2 ms，内存 64 MB。",
+    "headings": [
+      "基线数据",
+      "优化后数据"
+    ],
+    "bullets": [
+      "数据来自本次压测记录"
+    ],
+    "code_snippets": [],
+    "available_assets": []
+  }
+}

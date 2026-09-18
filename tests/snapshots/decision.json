@@ -1,0 +1,27 @@
+{
+  "asset_requests": [
+    "decision_evidence"
+  ],
+  "beats": [
+    "hook",
+    "comparison",
+    "decision_evidence",
+    "takeaway"
+  ],
+  "evidence_scenes": [],
+  "has_placeholders": true,
+  "profile": "decision",
+  "scene_ids": [
+    "hook",
+    "comparison",
+    "decision_evidence",
+    "takeaway"
+  ],
+  "variant": "mechanism_first",
+  "visuals": [
+    "title_card",
+    "split_compare",
+    "asset_placeholder",
+    "title_card"
+  ]
+}

@@ -1,0 +1,277 @@
+meta:
+  title: "Codex CLI 零基础实战精讲：从极速安装到玩转终端 AI 编程"
+  resolution: [1920, 1080]
+  fps: 30
+  theme: "dark"
+  speaker: "erii"
+  host_badge:
+    name: "上杉绘梨衣"
+    sub: "Codex CLI 实战精讲 · 终端高效编程"
+  bgm:
+    file: "bgm.mp3"
+    volume: 0.10
+    fade_in: 1.5
+    fade_out: 2.0
+  sfx:
+    enabled: true
+
+scenes:
+  # 幕 1: 极速安装与环境准备 (打字机终端模拟)
+  - id: "scene1_install"
+    theme: "dark"
+    character_mode: "pip"
+    character_sticker: "erii_avatar"
+    transition: "slide_left"
+    punch_words:
+      - text: "一条命令，秒级装好 Codex CLI！"
+        style: "emerald"
+    audio:
+      text: "想用好 AI 编程，终端里的 Codex CLI 绝对是效率天花板。它的安装极其简单。打开你的终端，输入 npm install 杠 g @openai/codex，或者通过 Homebrew 直接执行 brew install codex。安装完成后，输入 codex 杠杠 version，只要看到版本号输出，就说明你的本地开发环境已经准备就绪了。"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "terminal_mock"
+      tag: "极速安装 · 环境准备"
+      header_title: "一、极速安装：一键配置 Codex CLI 开发环境"
+      header_sub: "支持 npm 与 Homebrew 两种途径，秒级验证终端运行环境"
+      prompt: "user@mac:~$ "
+      command: "npm install -g @openai/codex"
+      output_lines:
+        - "[Install] Fetching @openai/codex package registry..."
+        - "[Install] Resolving binary dependencies: node >= 18.0.0"
+        - "[Verify] Installed successfully: /usr/local/bin/codex"
+        - "[Verify] codex v0.1.25 ready for use"
+
+  # 幕 2: 首次唤醒与免密登录 (打字机终端模拟)
+  - id: "scene2_auth"
+    theme: "dark"
+    character_mode: "pip"
+    character_sticker: "erii_avatar"
+    transition: "cut"
+    punch_words:
+      - text: "自动拉起浏览器，免密直接登录！"
+        style: "indigo"
+    audio:
+      text: "装好之后，在你的项目目录下直接输入 codex 并回车。初次使用时，终端会自动唤醒浏览器打开登录页面，只要你登录了 ChatGPT 或 OpenAI 账号，点击授权即可秒级绑定。无需手动寻找和配置复杂的 API Key，终端握手成功后，就会直接进入 codex 的交互式会话提示符。"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "terminal_mock"
+      tag: "免密登录 · 快速认证"
+      header_title: "二、首次唤醒：浏览器免密授权与会话建立"
+      header_sub: "无需繁琐配置 API Key，终端自动拉起浏览器完成安全握手"
+      prompt: "user@mac:~/my-project$ "
+      command: "codex"
+      output_lines:
+        - "[Auth] Welcome to OpenAI Codex CLI!"
+        - "[Auth] No local credentials found. Opening browser for sign-in..."
+        - "[Verify] Authenticated as dev@company.com (Pro Tier)"
+        - "[Ready] Initialized context for ~/my-project. Type /help for commands."
+        - "codex> "
+
+  # 幕 3: TUI 界面解构与命令调色板 (macOS 真实截图展台 + 左侧要点)
+  - id: "scene3_tui_layout"
+    theme: "dark"
+    # 本幕不再使用“左侧总结卡 + 右侧截图”的模板；让真实界面承担叙事主体。
+    character_mode: "none"
+    transition: "cut"
+    punch_words:
+      - text: "斜杠唤醒命令，Tab 一键补全！"
+        style: "gold"
+    audio:
+      text: "进入 Codex 交互界面后，整个终端会呈现三个核心区域。上方是历史消息流，清晰记录 Agent 的思考过程与执行细节；底部是自然语言输入框，敲入斜杠即可呼出命令调色板；最下方则是状态指示栏，让你一眼看清当前使用的模型与沙箱权限。按 Tab 键还能自动补全文件名和命令，操作体验非常顺滑。"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "image"
+      presentation: "cinematic"
+      file: "codex_slash_commands.png"
+      header_title: "三、交互界面：TUI 终端工作区与命令调色板"
+      # at 为本幕相对时间（0~1）；focus/callout 均使用素材自身的归一化坐标。
+      beats:
+        - at: 0.00
+          focus: [0.54, 0.34]
+          scale: 1.04
+          callout: [0.26, 0.20, 0.57, 0.55]
+          label: "先看命令调色板：所有高频操作都在这里聚合"
+          accent: "indigo"
+        - at: 0.34
+          focus: [0.50, 0.76]
+          scale: 1.32
+          callout: [0.25, 0.72, 0.25, 0.14]
+          label: "输入一个 /，从自然语言输入切换到指令模式"
+          accent: "gold"
+        - at: 0.68
+          focus: [0.64, 0.46]
+          scale: 1.20
+          callout: [0.28, 0.29, 0.50, 0.10]
+          label: "跟随高亮条浏览命令，再用 Tab 完成下一步操作"
+          accent: "emerald"
+
+  # 幕 4: 两种核心运行姿势对比 (双卡深度对抗)
+  - id: "scene4_two_modes"
+    theme: "dark"
+    character_mode: "pip"
+    character_sticker: "erii_avatar"
+    transition: "slide_left"
+    punch_words:
+      - text: "交互式日常写代码，单行式搞定自动化！"
+        style: "emerald"
+    audio:
+      text: "Codex CLI 拥有两种截然不同的运行姿势。第一种是直接输入 codex 进入的交互式会话，适合复杂功能的反复迭代与重构，你能随时打断并微调；第二种是单行模式，也就是 codex exec 加上你的提示词，它会在后台一次性执行完毕并直接退出，非常适合用来做代码审查、单测生成，以及无缝接入自动化流水线。"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "split_compare"
+      tag: "双模姿势 · 场景匹配"
+      header_title: "四、核心姿势：交互式 TUI 会话 vs 单行命令自动化"
+      header_sub: "根据任务复杂度灵活挑选运行姿势，兼顾人机协同与自动化流水线"
+      left:
+        theme: "blue"
+        badge: "交互模式：codex"
+        title: "TUI 沉浸式多轮会话"
+        bullets:
+          - "复杂需求拆解：适合多步骤工程重构与跨文件深层逻辑排查"
+          - "随时交互打断：开发过程中可随时补充限定条件或微调方案"
+          - "人工在环掌控：对每一步文件修改与终端执行进行实时审查"
+        metrics:
+          label: "适用场景"
+          value: "日常沉浸式功能研发"
+      right:
+        theme: "emerald"
+        badge: "单行模式：codex exec"
+        title: "极速非交互自动化"
+        bullets:
+          - "单行直接出结果：一条终端指令完成快速问答或单文件审查"
+          - "流水线自动集成：无缝嵌入 Git 钩子与持续集成自动化测试中"
+          - "标准输出重定向：轻松将 Agent 输出结果写入日志或流水线管道"
+        metrics:
+          label: "适用场景"
+          value: "批处理与自动化管道"
+
+  # 幕 5: 安全生命线与审批机制 (打字机终端模拟)
+  - id: "scene5_sandbox_approval"
+    theme: "dark"
+    character_mode: "pip"
+    character_sticker: "erii_avatar"
+    transition: "cut"
+    punch_words:
+      - text: "读写沙箱隔离，关键变更人工审批！"
+        style: "rose"
+    audio:
+      text: "新手使用 CLI 最担心的就是代码被误删。Codex 在安全设计上非常严谨，它具备双重防护机制。首先是沙箱隔离，默认情况下只能访问你当前指定的工程目录，绝不会越界修改系统文件；其次是人工审批机制，当它尝试修改关键文件或执行安装命令时，终端会停下来等待你的确认。你可以先按 d 键查看详细 diff，确认无误再按 y 批准执行。"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "terminal_mock"
+      tag: "安全生命线 · 沙箱防护"
+      header_title: "五、安全生命线：审批机制与读写沙箱边界"
+      header_sub: "双重防护机制：阻断非预期破坏，牢牢守住本地系统安全底线"
+      prompt: "user@mac:~/my-project$ "
+      command: "codex --sandbox workspace-write"
+      output_lines:
+        - "[Sandbox] Enforcing filesystem jail: ~/my-project only"
+        - "[Security] External network & system paths blocked"
+        - "[Inspect] Agent proposes to modify: src/auth_service.py"
+        - "[Security] Requesting User Approval: [y]es / [n]o / [d]iff > diff"
+        - "[Verify] Diff approved. Applying patches to working tree."
+
+  # 幕 6: 终端必学的 5 大斜杠指令 (macOS 真实截图展台 + 左侧要点)
+  - id: "scene6_slash_commands"
+    theme: "dark"
+    character_mode: "pip"
+    character_sticker: "erii_avatar"
+    transition: "cut"
+    camera:
+      motion: "zoom_in"
+    punch_words:
+      - text: "先计划后编码，终端穿透不退屏！"
+        style: "gold"
+    audio:
+      text: "在交互式界面中，熟练使用这五个斜杠命令，效率直接翻倍。第一个是斜杠 plan，遇到复杂大需求，先让它制定分步计划，你点头确认后再动手；第二个是斜杠 model，随时切换不同推理模型；第三个是斜杠 review，审查当前工作区的改动；第四个是斜杠 compact，压缩冗长的上下文；最后是感叹号接本地命令，无需退出会话，就能直接跑 Git 或者执行本地脚本。"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "image"
+      file: "codex_slash_matrix.png"
+      tag: "效能飞跃 · 高频指令"
+      header_title: "六、效率神器：终端必学的 5 大斜杠指令"
+      header_sub: "善用内建命令，将复杂架构拆解、模型调度与环境穿透化繁为简"
+      badge: "5 大高频命令矩阵"
+      title: "高阶开发者的效率倍增器"
+      window_title: "Codex Architecture & Task Planning - /plan"
+      bullets:
+        - "/plan 任务拆解：大需求先生成架构设计与实施计划，确认后再写代码"
+        - "/model 灵活换脑：按需自由切换 o3-mini、gpt-4o 等高性能推理模型"
+        - "/review 智能审阅：快速对比当前工作区改动，排查逻辑盲点与潜在缺陷"
+        - "/compact 压缩上下文：智能总结长会话历史，大幅节省 Token 并提升响应速度"
+        - "!<cmd> 终端穿透：无需退出 Codex，直接执行 git status 或 npm run 等本地命令"
+
+  # 幕 7: 小白实操四步法闭环 (动态拓扑节点 + 激光粒子流)
+  - id: "scene7_workflow_nodes"
+    theme: "dark"
+    character_mode: "pip"
+    character_sticker: "erii_avatar"
+    transition: "cut"
+    punch_words:
+      - text: "诊断、计划、编码、跑测，四步安全闭环！"
+        style: "emerald"
+    audio:
+      text: "掌握了基础命令，小白如何完成第一个完整的开发任务呢？推荐这套四步工作流。第一步先做扫描诊断，让智能体只读阅读你的项目结构；第二步用斜杠 plan 生成实施步骤；第三步在沙箱写保护下进行业务编码；第四步让它自动运行单元测试并审查 diff。按照这个标准步骤，你就能稳妥推进每一个工程任务，杜绝翻车。"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "custom_nodes"
+      tag: "实操心法 · 闭环工作流"
+      header_title: "七、小白实操四步法：工程任务标准闭环"
+      header_sub: "从接手任务到安全提交的标准化 SOP，零基础也能稳定交付高质量代码"
+      nodes:
+        - title: "1. 扫描诊断"
+          sub: "只读通读仓库架构"
+          theme: "blue"
+        - title: "2. 方案计划"
+          sub: "/plan 拆解落地步骤"
+          theme: "amber"
+        - title: "3. 编码实施"
+          sub: "沙箱内修改业务代码"
+          theme: "green"
+        - title: "4. 单测与审查"
+          sub: "本地跑测并提交 PR"
+          theme: "white"
+
+  # 幕 8: 进阶掌控——配置文件与 AGENTS.md 规范 (macOS 真实截图展台 + 白底优化)
+  - id: "scene8_config_agents"
+    theme: "dark"
+    character_mode: "pip"
+    character_sticker: "erii_avatar"
+    transition: "cut"
+    punch_words:
+      - text: "写好 AGENTS.md，打造懂你的专属开发副驾！"
+        style: "indigo"
+    audio:
+      text: "最后教大家一个进阶秘诀：让 Codex 真正懂你的业务。你可以在电脑主目录的 config.toml 中固化全局默认配置，更重要的是，在每个项目的根目录下创建一个 AGENTS.md 文件。在里面写清楚你的技术栈、代码命名规范、单元测试命令和严禁修改的文件。这样 Codex 每次启动都会自动读取这些规则，成为你最称手、最懂你的专属开发副驾！"
+      speed: 1.00
+      pause: 0.20
+      emotion: "normal"
+    visual:
+      type: "image"
+      file: "codex_config_structure.png"
+      img_bg: "white"
+      tag: "工程治理 · 专属副驾"
+      header_title: "八、进阶掌控：全局配置与 AGENTS.md 规范"
+      header_sub: "将团队规范与偏好固化为永久规则，打造懂你业务的专属 AI 团队"
+      badge: "配置与规范协同"
+      title: "让 AI 真正深度契合团队"
+      window_title: "Codex Configuration & AGENTS.md Specification"
+      bullets:
+        - "~/.codex/config.toml：固化全局默认模型、审批模式与沙箱超时时间"
+        - "AGENTS.md 项目规范：在根目录写明代码风格、测试指令与严禁触碰的敏感目录"
+        - "自动化上下文注入：每次进入项目自动加载规则，无需反复重复业务背景"
+        - "团队沉淀与传承：将高质量提示词与项目约束纳入 Git 版本管理共享"

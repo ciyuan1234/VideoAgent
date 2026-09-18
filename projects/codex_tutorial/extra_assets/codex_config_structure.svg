@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#1f2937">Codex CLI 配置结构图</text>
+
+  <!-- Root Node -->
+  <ellipse cx="400" cy="70" rx="70" ry="30" fill="#fef3c7" stroke="#92400e" stroke-width="2"/>
+  <text x="400" y="75" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#92400e">config.toml</text>
+
+  <!-- Arrow from root to sections -->
+  <line x1="400" y1="100" x2="400" y2="130" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowhead)"/>
+
+  <!-- Section Nodes -->
+  <!-- Row 1 -->
+  <g filter="url(#shadow)">
+    <rect x="120" y="140" width="100" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="170" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1e40af" font-weight="bold">Model</text>
+    <text x="170" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1e3a8a">模型配置</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="350" y="140" width="100" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="400" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#1e40af" font-weight="bold">TUI</text>
+    <text x="400" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#1e3a8a">终端界面</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="580" y="140" width="100" height="50" rx="8" fill="#d1fae5" stroke="#059669" stroke-width="2"/>
+    <text x="630" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#065f46" font-weight="bold">Skills</text>
+    <text x="630" y="175" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#064e3b">技能配置</text>
+  </g>
+
+  <!-- Row 2 -->
+  <g filter="url(#shadow)">
+    <rect x="120" y="220" width="100" height="50" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+    <text x="170" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#9d174d" font-weight="bold">Features</text>
+    <text x="170" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#831843">功能开关</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="350" y="220" width="100" height="50" rx="8" fill="#e0e7ff" stroke="#4f46e5" stroke-width="2"/>
+    <text x="400" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#3730a3" font-weight="bold">MCP Servers</text>
+    <text x="400" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#312e81">MCP服务器</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="580" y="220" width="100" height="50" rx="8" fill="#fed7aa" stroke="#ea580c" stroke-width="2"/>
+    <text x="630" y="240" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#c2410c" font-weight="bold">Notify</text>
+    <text x="630" y="255" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#9a3412">通知设置</text>
+  </g>
+
+  <!-- Row 3 - Sandbox -->
+  <g filter="url(#shadow)">
+    <rect x="350" y="300" width="100" height="50" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="400" y="320" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#991b1b" font-weight="bold">Sandbox</text>
+    <text x="400" y="335" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f1d1d">沙箱配置</text>
+  </g>
+
+  <!-- Connecting lines from root -->
+  <line x1="400" y1="100" x2="170" y2="140" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="100" x2="400" y2="140" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="100" x2="630" y2="140" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <line x1="170" y1="190" x2="170" y2="220" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="400" y1="190" x2="400" y2="220" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+  <line x1="630" y1="190" x2="630" y2="220" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <line x1="400" y1="270" x2="400" y2="300" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+
+  <!-- Legend -->
+  <rect x="50" y="420" width="700" height="120" rx="8" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="70" y="445" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#374151">配置说明：</text>
+
+  <circle cx="80" cy="470" r="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1"/>
+  <text x="95" y="474" font-family="Arial, sans-serif" font-size="11" fill="#4b5563">Model - 模型选择与推理配置</text>
+
+  <circle cx="80" cy="495" r="6" fill="#d1fae5" stroke="#059669" stroke-width="1"/>
+  <text x="95" y="499" font-family="Arial, sans-serif" font-size="11" fill="#4b5563">Skills - 技能系统配置</text>
+
+  <circle cx="80" cy="520" r="6" fill="#fce7f3" stroke="#db2777" stroke-width="1"/>
+  <text x="95" y="524" font-family="Arial, sans-serif" font-size="11" fill="#4b5563">Features - 功能开关控制</text>
+
+  <circle cx="380" cy="470" r="6" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1"/>
+  <text x="395" y="474" font-family="Arial, sans-serif" font-size="11" fill="#4b5563">MCP Servers - 外部工具集成</text>
+
+  <circle cx="380" cy="495" r="6" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="395" y="499" font-family="Arial, sans-serif" font-size="11" fill="#4b5563">Notify - 任务完成通知</text>
+
+  <circle cx="380" cy="520" r="6" fill="#fee2e2" stroke="#dc2626" stroke-width="1"/>
+  <text x="395" y="524" font-family="Arial, sans-serif" font-size="11" fill="#4b5563">Sandbox - 执行安全沙箱</text>
+</svg>

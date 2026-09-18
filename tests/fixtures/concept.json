@@ -1,0 +1,20 @@
+{
+  "story_profile": "concept",
+  "story_variant": "auto",
+  "content": {
+    "source_type": "file",
+    "title": "epoll 事件驱动工作原理",
+    "raw_text": "epoll 通过内核红黑树与就绪链表管理海量连接，事件就绪时唤醒用户态处理。",
+    "headings": [
+      "就绪队列与回调",
+      "事件通知路径",
+      "与轮询模型的关键差异"
+    ],
+    "bullets": [
+      "事件驱动避免全量遍历",
+      "就绪链表只存放活跃连接"
+    ],
+    "code_snippets": [],
+    "available_assets": []
+  }
+}

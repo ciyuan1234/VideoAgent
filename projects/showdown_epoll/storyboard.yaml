@@ -1,0 +1,191 @@
+meta:
+  title: "高并发架构大对决：从线性轮询到事件驱动"
+  resolution: [1920, 1080]
+  fps: 30
+  theme: "white_grid"
+  speaker: "erii"
+  bgm:
+    file: "bgm.mp3"
+    volume: 0.10
+    fade_in: 1.5
+    fade_out: 2.0
+  sfx:
+    enabled: true
+
+scenes:
+  # 场景 1: 封面大卡片 + 虚拟摄像机平滑推镜
+  - id: "scene1_intro"
+    character_sticker: "erii_presenter"
+    transition: "slide_left"
+    camera:
+      motion: "zoom_in"
+    punch_words:
+      - text: "硬核选型大对决"
+        style: "indigo"
+    audio:
+      text: "Sakura，欢迎来到我的计算机小课堂！今天我们来一场硬核选型大对决：为什么同样的硬件，从 select 升级到 epoll，并发性能能提升上百倍？"
+      speed: 1.05
+      pause: 0.45
+      emotion: "normal"
+    visual:
+      type: "title_card"
+      tag: "硬核架构选型对决"
+      title: "高并发架构大对决"
+      subtitle: "从 select 轮询到 epoll 事件驱动的底层飞跃"
+      bullets:
+        - "为什么传统 select 连接一多 CPU 就疯狂空转？"
+        - "左右分屏 PK：内核事件通知机制深度对比"
+        - "真实压测跑分：50000 压测下 14 倍吞吐量差距真相"
+
+  # 场景 2: 左右分屏 PK 对决 (痛点 vs 突破)
+  - id: "scene2_compare"
+    character_sticker: "erii_chibi_think"
+    transition: "slide_left"
+    punch_words:
+      - text: "彻底告别无用功！"
+        style: "emerald"
+    audio:
+      text: "我们直接看左右两组核心机制对比。左边的传统 select 每次都要把全部套接字拷贝进内核，全量轮询；而右边的 epoll 仅需一次注册，就绪事件由内核中断精准唤醒，彻底告别无用功！"
+      speed: 1.05
+      pause: 0.45
+      emotion: "normal"
+    visual:
+      type: "split_compare"
+      header_title: "一、机制对抗：O(n) 轮询 vs O(1) 事件通知"
+      header_sub: "连接规模放大时，传统方案与现代方案的致命分水岭"
+      left:
+        badge: "❌ select / poll (传统方式)"
+        title: "线性轮询的性能痛点"
+        bullets:
+          - "每次调用必须从用户态全量深拷贝 fd 数组"
+          - "内核必须无脑遍历全部连接检查状态"
+          - "99% 的连接处于空闲状态，CPU 严重白白空转"
+        metrics:
+          label: "单进程上限"
+          value: "1024 限制 (FD_SETSIZE 瓶颈)"
+      right:
+        badge: "✅ epoll / kqueue (现代方案)"
+        title: "内核就绪事件精准唤醒"
+        bullets:
+          - "内核维护专属红黑树，仅需注册一次关注事件"
+          - "网卡收到数据触发软中断，直接把 fd 塞入就绪队列"
+          - "用户态 epoll_wait 瞬间返回，纯粹 O(1) 极速处理"
+        metrics:
+          label: "单进程上限"
+          value: "100万+ (仅受限于物理内存大小)"
+
+  # 场景 3: 动态跑分柱状图与数字翻牌器
+  - id: "scene3_benchmark"
+    character_sticker: "erii_chibi_cheer"
+    transition: "cut"
+    camera:
+      motion: "zoom_punch"
+    punch_words:
+      - text: "性能暴涨整整十四倍！"
+        style: "gold"
+    audio:
+      text: "纸上谈兵不如直接看压测数据！在五万长连接高频请求下，传统 select 吞吐量只有四千八百 QPS，而 epoll 直接飙到了六万八千 QPS，性能暴涨了整整十四倍！"
+      speed: 1.10
+      pause: 0.45
+      emotion: "excited"
+    visual:
+      type: "chart_benchmark"
+      header_title: "二、实测跑分：50,000 高并发长连接压测对比"
+      header_sub: "测试工具：wrk 压测集群 | 吞吐量 (QPS) 越高越好"
+      champion_tag: "⚡ 性能暴涨 14.1 倍！压倒性优势"
+      data:
+        - label: "select (Apache prefork 传统模型)"
+          value: 4800
+          unit: "QPS"
+          theme: "rose"
+        - label: "poll (单进程轮询事件模型)"
+          value: 5600
+          unit: "QPS"
+          theme: "slate"
+        - label: "epoll (Nginx 高性能事件驱动)"
+          value: 68000
+          unit: "QPS"
+          theme: "emerald"
+
+  # 场景 4: Git Diff 源码重构对比
+  - id: "scene4_diff"
+    character_sticker: "erii_chibi_cheer"
+    transition: "cut"
+    punch_words:
+      - text: "彻底消除了 CPU 空转！"
+        style: "emerald"
+    audio:
+      text: "直接看代码重构 Diff 对比！旧方案需要写上百行循环遍历；而重构后直接调用 epoll_wait，彻底消除了所有 CPU 空转，优雅而纯粹！"
+      speed: 1.08
+      pause: 0.45
+      emotion: "excited"
+    visual:
+      type: "git_diff"
+      header_title: "三、代码重构：从轮询到事件驱动"
+      header_sub: "用 3 行高效调用替换上百行低效循环"
+      file_name: "src/network/event_loop.c (Diff 优化)"
+      summary_tag: "⚡ 彻底消除 CPU 空转，事件到达硬件软中断直接唤醒"
+      diff: |
+        - // 旧方案：每次唤醒都全量轮询全部描述符
+        - for (int i = 0; i < max_fd; i++) {
+        -     if (FD_ISSET(i, &read_fds)) {
+        -         handle_client_data(i);
+        -     }
+        - }
+        + // 新方案：内核就绪链表直达，O(1) 极速处理
+        + int nfds = epoll_wait(epfd, events, MAX_EVENTS, -1);
+        + for (int i = 0; i < nfds; ++i) {
+        +     handle_client_data(events[i].data.fd);
+        + }
+
+  # 场景 5: 拟真 macOS 终端打字机
+  - id: "scene5_terminal"
+    character_sticker: "erii_chibi_think"
+    transition: "slide_left"
+    audio:
+      text: "我们通过终端执行极限压测命令。可以看到，Linux 内核分配了一百万个文件描述符，在高并发压测下不仅内存占用极低，CPU 更是几乎零空转，这就是架构优化的魅力！"
+      speed: 1.05
+      pause: 0.45
+      emotion: "normal"
+    visual:
+      type: "terminal"
+      header_title: "四、生产实机演练：突破百万高并发连接"
+      header_sub: "调优文件句柄并执行大规模基准测试"
+      command: "wrk -t16 -c50000 -d30s http://127.0.0.1:8080/benchmark"
+      output_lines:
+        - "Running 30s test @ http://127.0.0.1:8080/benchmark"
+        - "16 threads and 50000 connections established"
+        - "Requests/sec: 68120.45 | Transfer/sec: 58.4MB"
+        - "epoll_wait latency p99: 1.24ms | 0 errors"
+
+  # 场景 6: 核心代码卡片 + 呼吸聚光灯
+  - id: "scene6_code"
+    character_sticker: "erii_chibi_happy"
+    transition: "cut"
+    audio:
+      text: "核心 API 就这三行，epoll_create 创建内核红黑树，epoll_ctl 挂载连接，最后用 epoll_wait 极速收割就绪事件。学会这套事件驱动模型，高并发网络编程你也能轻松驾驭！"
+      speed: 1.05
+      pause: 0.45
+      emotion: "normal"
+    visual:
+      type: "code"
+      header_title: "五、核心 API：优雅简洁的三大系统调用"
+      header_sub: "epoll_create1、epoll_ctl 与 epoll_wait 源码精解"
+      lang: "c"
+      theme: "OneHalfLight"
+      spotlight_line: 8
+      code: |
+        // 1. 创建内核 epoll 实例与红黑树
+        int epfd = epoll_create1(0);
+
+        // 2. 注册关注的 socket 读就绪事件
+        struct epoll_event ev, events[MAX_EVENTS];
+        ev.events = EPOLLIN | EPOLLET; // 边缘触发模式
+        ev.data.fd = listen_sock;
+        epoll_ctl(epfd, EPOLL_CTL_ADD, listen_sock, &ev);
+
+        // 3. 阻塞等待，内核就绪事件直达，O(1) 极速返回
+        int nfds = epoll_wait(epfd, events, MAX_EVENTS, -1);
+        for (int i = 0; i < nfds; ++i) {
+            handle_event(events[i].data.fd);
+        }

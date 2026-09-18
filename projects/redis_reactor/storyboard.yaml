@@ -1,0 +1,96 @@
+meta:
+  title: "Redis 为什么这么快？单线程与事件循环深度剖析"
+  resolution: [1920, 1080]
+  fps: 30
+  theme: "white_grid"
+  speaker: "erii"
+  bgm:
+    file: "bgm.mp3"
+    volume: 0.10
+    fade_in: 1.5
+    fade_out: 2.0
+  sfx:
+    enabled: true
+
+scenes:
+  # 场景 1: 封面大卡片 + 绘梨衣主讲人立绘
+  - id: "scene1_intro"
+    character_sticker: "erii_presenter"
+    audio:
+      text: "Sakura，欢迎来到我的计算机小课堂！今天我们来深度剖析 Redis 为什么这么快，它的单线程架构与事件循环究竟有什么秘密？"
+      speed: 1.05
+      pause: 0.45
+    visual:
+      type: "title_card"
+      tag: "高性能架构深度剖析"
+      title: "Redis 为什么这么快？"
+      subtitle: "单线程与事件循环深度剖析"
+      bullets:
+        - "单线程 Reactor 反应器模式：告别锁竞争开销"
+        - "aeEventLoop 事件循环：文件事件与时间事件协同调度"
+        - "IO 多路复用：单线程同时监听海量连接的底层秘密"
+
+  # 场景 2: custom_nodes 架构流向图：Socket客户端 -> IO多路复用 -> 事件派发器 -> 命令处理器
+  - id: "scene2_reactor"
+    character_sticker: "erii_chibi_think"
+    audio:
+      text: "Redis 采用单线程 Reactor 模型。所有客户端连接经由 IO 多路复用层统一监听，就绪事件推入事件派发器，再精准路由到对应的命令处理器执行，全程无锁无切换，效率极致拉满！"
+      speed: 1.05
+      pause: 0.45
+    visual:
+      type: "custom_nodes"
+      header_title: "一、单线程 Reactor 事件驱动架构"
+      header_sub: "IO 多路复用 + 事件派发：单线程撑起十万 QPS 的核心秘密"
+      nodes:
+        - title: "Socket 客户端连接"
+          sub: "海量并发请求涌入"
+          theme: "white"
+        - title: "IO 多路复用层"
+          sub: "epoll / select 统一监听"
+          theme: "blue"
+        - title: "事件派发器"
+          sub: "aeEventLoop 就绪事件路由"
+          theme: "amber"
+        - title: "命令处理器"
+          sub: "单线程串行极速执行"
+          theme: "green"
+
+  # 场景 3: code 浅色代码卡片，展示 aeEventLoop 核心逻辑与聚光灯高亮
+  - id: "scene3_code"
+    character_sticker: "erii_chibi_happy"
+    audio:
+      text: "这就是 Redis 源码中 aeEventLoop 的核心循环。每一次迭代先调用 IO 多路复用等待就绪事件，再逐一回调对应的读写处理器，时间事件也在同一个循环里协同处理。单线程、无锁、高效，这就是 Redis 快的底层真相！"
+      speed: 1.05
+      pause: 0.45
+    visual:
+      type: "code"
+      header_title: "二、aeEventLoop 核心循环：Redis 事件引擎源码解析"
+      header_sub: "文件事件 + 时间事件协同调度，单线程 O(1) 极速响应"
+      lang: "c"
+      theme: "OneHalfLight"
+      spotlight_line: 8
+      code: |
+        void aeMain(aeEventLoop *eventLoop) {
+            eventLoop->stop = 0;
+            while (!eventLoop->stop) {
+                // 执行前置钩子（如 beforeSleep：刷 AOF、回写客户端）
+                if (eventLoop->beforesleep != NULL)
+                    eventLoop->beforesleep(eventLoop);
+                // 核心：IO 多路复用等待就绪事件 + 时间事件统一调度
+                aeProcessEvents(eventLoop, AE_ALL_EVENTS | AE_CALL_AFTER_SLEEP);
+            }
+        }
+
+        int aeProcessEvents(aeEventLoop *eventLoop, int flags) {
+            // 1. 调用 epoll_wait / select 获取就绪文件事件
+            int numevents = aeApiPoll(eventLoop, tvp);
+            // 2. 逐一回调读写事件处理器
+            for (int j = 0; j < numevents; j++) {
+                aeFileEvent *fe = &eventLoop->events[eventLoop->fired[j].fd];
+                if (fe->rfileProc) fe->rfileProc(eventLoop, fd, fe->clientData, mask);
+                if (fe->wfileProc) fe->wfileProc(eventLoop, fd, fe->clientData, mask);
+            }
+            // 3. 处理到期时间事件（如过期键清理、周期统计）
+            if (flags & AE_TIME_EVENTS) processTimeEvents(eventLoop);
+            return processed;
+        }

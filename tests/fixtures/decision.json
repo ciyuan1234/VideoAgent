@@ -1,0 +1,18 @@
+{
+  "story_profile": "decision",
+  "story_variant": "auto",
+  "content": {
+    "source_type": "file",
+    "title": "Postgres 与 MySQL 选型对比",
+    "raw_text": "两者在一致性、扩展成本与运维复杂度上存在差异，需要结合团队能力评估。",
+    "headings": [
+      "一致性取舍",
+      "运维成本对比"
+    ],
+    "bullets": [
+      "按业务约束而不是偏好选择"
+    ],
+    "code_snippets": [],
+    "available_assets": []
+  }
+}

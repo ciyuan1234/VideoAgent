@@ -1,0 +1,27 @@
+{
+  "asset_requests": [
+    "runtime_evidence"
+  ],
+  "beats": [
+    "hook",
+    "mechanism",
+    "runtime_evidence",
+    "takeaway"
+  ],
+  "evidence_scenes": [],
+  "has_placeholders": true,
+  "profile": "concept",
+  "scene_ids": [
+    "hook",
+    "mechanism",
+    "runtime_evidence",
+    "takeaway"
+  ],
+  "variant": "mechanism_first",
+  "visuals": [
+    "title_card",
+    "custom_nodes",
+    "asset_placeholder",
+    "title_card"
+  ]
+}

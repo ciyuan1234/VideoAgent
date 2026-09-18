@@ -1,0 +1,31 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Intermediate project audio & frame caches
+.cache/
+**/.cache/
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon\r\r
+
+# Environment variables & virtual environments
+.env
+.env.*
+.venv/
+venv/
+ENV/
+env/
+
+# Temporary CLI test outputs
+output/*.wav
+output/*.png
+output/*.mp4
+
+# Logs
+*.log

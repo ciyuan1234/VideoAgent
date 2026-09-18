@@ -1,0 +1,25 @@
+{
+  "asset_requests": [],
+  "beats": [
+    "hook",
+    "workflow",
+    "operation",
+    "takeaway"
+  ],
+  "evidence_scenes": [],
+  "has_placeholders": false,
+  "profile": "tutorial",
+  "scene_ids": [
+    "hook",
+    "workflow",
+    "operation",
+    "takeaway"
+  ],
+  "variant": "mechanism_first",
+  "visuals": [
+    "title_card",
+    "custom_nodes",
+    "video_clip",
+    "title_card"
+  ]
+}

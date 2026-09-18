@@ -1,0 +1,30 @@
+{
+  "asset_requests": [
+    "runtime_evidence"
+  ],
+  "beats": [
+    "hook",
+    "runtime_evidence",
+    "source",
+    "mechanism",
+    "takeaway"
+  ],
+  "evidence_scenes": [],
+  "has_placeholders": true,
+  "profile": "code_walkthrough",
+  "scene_ids": [
+    "hook",
+    "runtime_evidence",
+    "source",
+    "mechanism",
+    "takeaway"
+  ],
+  "variant": "evidence_first",
+  "visuals": [
+    "title_card",
+    "asset_placeholder",
+    "code",
+    "custom_nodes",
+    "title_card"
+  ]
+}

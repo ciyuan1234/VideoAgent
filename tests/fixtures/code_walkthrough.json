@@ -1,0 +1,23 @@
+{
+  "story_profile": "code_walkthrough",
+  "story_variant": "auto",
+  "content": {
+    "source_type": "file",
+    "title": "调度器源码走读",
+    "raw_text": "下面这段源码展示任务分发的核心实现。",
+    "headings": [
+      "任务入队",
+      "工作线程取出任务"
+    ],
+    "bullets": [
+      "状态机在每次分发后更新"
+    ],
+    "code_snippets": [
+      {
+        "lang": "python",
+        "code": "def dispatch(task):\n    queue.push(task)\n    return queue.pop()"
+      }
+    ],
+    "available_assets": []
+  }
+}

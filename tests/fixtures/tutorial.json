@@ -1,0 +1,20 @@
+{
+  "story_profile": "tutorial",
+  "story_variant": "auto",
+  "content": {
+    "source_type": "file",
+    "title": "Redis 安装与配置教程",
+    "raw_text": "本教程介绍 Redis 的安装、配置与启动步骤。依次执行命令即可完成部署。",
+    "headings": [
+      "环境准备",
+      "安装与启动",
+      "首次连接验证"
+    ],
+    "bullets": [
+      "安装前确认系统依赖",
+      "启动后使用 ping 验证连接"
+    ],
+    "code_snippets": [],
+    "available_assets": []
+  }
+}

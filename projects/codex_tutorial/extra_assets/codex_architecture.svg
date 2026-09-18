@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 700" width="960" height="700">
+  <style>
+    text { font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#16a34a"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#9333ea"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="960" height="700" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="480" y="35" text-anchor="middle" font-size="20" font-weight="600" fill="#111827">Codex 系统架构</text>
+
+  <!-- Layer 1: Client Layer -->
+  <rect x="20" y="60" width="920" height="80" rx="8" fill="#f9fafb" stroke="#e5e7eb" stroke-dasharray="4,4"/>
+  <text x="40" y="80" font-size="12" font-weight="600" fill="#6b7280">Client Layer 客户端层</text>
+
+  <!-- Client boxes -->
+  <g transform="translate(60, 100)">
+    <rect x="0" y="0" width="100" height="30" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+    <text x="50" y="20" text-anchor="middle" font-size="11" fill="#111827">App</text>
+  </g>
+  <g transform="translate(180, 100)">
+    <rect x="0" y="0" width="100" height="30" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+    <text x="50" y="20" text-anchor="middle" font-size="11" fill="#111827">IDE</text>
+  </g>
+  <g transform="translate(300, 100)">
+    <rect x="0" y="0" width="100" height="30" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+    <text x="50" y="20" text-anchor="middle" font-size="11" fill="#111827">CLI</text>
+  </g>
+  <g transform="translate(420, 100)">
+    <rect x="0" y="0" width="100" height="30" rx="6" fill="#eff6ff" stroke="#2563eb"/>
+    <text x="50" y="20" text-anchor="middle" font-size="11" fill="#111827">Web</text>
+  </g>
+  <g transform="translate(540, 100)">
+    <rect x="0" y="0" width="100" height="30" rx="6" fill="#f0fdf4" stroke="#16a34a"/>
+    <text x="50" y="20" text-anchor="middle" font-size="11" fill="#111827">SDK</text>
+  </g>
+  <g transform="translate(660, 100)">
+    <rect x="0" y="0" width="100" height="30" rx="6" fill="#faf5ff" stroke="#9333ea"/>
+    <text x="50" y="20" text-anchor="middle" font-size="11" fill="#111827">GitHub</text>
+  </g>
+  <g transform="translate(780, 100)">
+    <rect x="0" y="0" width="100" height="30" rx="6" fill="#fef3c7" stroke="#d97706"/>
+    <text x="50" y="20" text-anchor="middle" font-size="11" fill="#111827">Slack</text>
+  </g>
+
+  <!-- Layer 2: Agent Core -->
+  <rect x="20" y="160" width="920" height="180" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-dasharray="4,4"/>
+  <text x="40" y="180" font-size="12" font-weight="600" fill="#0369a1">Agent Core Agent 核心层</text>
+
+  <!-- Agent Core -->
+  <g transform="translate(380, 210)">
+    <rect x="0" y="0" width="200" height="120" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="100" y="25" text-anchor="middle" font-size="14" font-weight="600" fill="#111827">Codex Agent</text>
+
+    <!-- Sub-components -->
+    <rect x="15" y="40" width="80" height="30" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="60" text-anchor="middle" font-size="10" fill="#111827">Planner</text>
+
+    <rect x="105" y="40" width="80" height="30" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="145" y="60" text-anchor="middle" font-size="10" fill="#111827">Executor</text>
+
+    <rect x="15" y="80" width="80" height="30" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="100" text-anchor="middle" font-size="10" fill="#111827">LLM</text>
+
+    <rect x="105" y="80" width="80" height="30" rx="4" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="145" y="100" text-anchor="middle" font-size="10" fill="#111827">Memory</text>
+  </g>
+
+  <!-- Tool Layer -->
+  <rect x="20" y="360" width="920" height="120" rx="8" fill="#faf5ff" stroke="#e9d5ff" stroke-dasharray="4,4"/>
+  <text x="40" y="380" font-size="12" font-weight="600" fill="#7e22ce">Tool Layer 工具层</text>
+
+  <!-- Tools -->
+  <g transform="translate(60, 400)">
+    <rect x="0" y="0" width="90" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="45" y="25" text-anchor="middle" font-size="11" fill="#111827">File Tool</text>
+    <text x="45" y="45" text-anchor="middle" font-size="9" fill="#6b7280">读写/编辑</text>
+  </g>
+  <g transform="translate(170, 400)">
+    <rect x="0" y="0" width="90" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="45" y="25" text-anchor="middle" font-size="11" fill="#111827">Bash Tool</text>
+    <text x="45" y="45" text-anchor="middle" font-size="9" fill="#6b7280">执行命令</text>
+  </g>
+  <g transform="translate(280, 400)">
+    <rect x="0" y="0" width="90" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="45" y="25" text-anchor="middle" font-size="11" fill="#111827">Web Search</text>
+    <text x="45" y="45" text-anchor="middle" font-size="9" fill="#6b7280">搜索</text>
+  </g>
+  <g transform="translate(390, 400)">
+    <rect x="0" y="0" width="90" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="45" y="25" text-anchor="middle" font-size="11" fill="#111827">MCP</text>
+    <text x="45" y="45" text-anchor="middle" font-size="9" fill="#6b7280">外部集成</text>
+  </g>
+  <g transform="translate(500, 400)">
+    <rect x="0" y="0" width="90" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="45" y="25" text-anchor="middle" font-size="11" fill="#111827">Browser</text>
+    <text x="45" y="45" text-anchor="middle" font-size="9" fill="#6b7280">浏览器</text>
+  </g>
+  <g transform="translate(610, 400)">
+    <rect x="0" y="0" width="90" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="45" y="25" text-anchor="middle" font-size="11" fill="#111827">Git</text>
+    <text x="45" y="45" text-anchor="middle" font-size="9" fill="#6b7280">版本控制</text>
+  </g>
+  <g transform="translate(720, 400)">
+    <rect x="0" y="0" width="90" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="45" y="25" text-anchor="middle" font-size="11" fill="#111827">Database</text>
+    <text x="45" y="45" text-anchor="middle" font-size="9" fill="#6b7280">数据操作</text>
+  </g>
+
+  <!-- Layer 3: Infrastructure -->
+  <rect x="20" y="500" width="920" height="120" rx="8" fill="#f0fdf4" stroke="#bbf7d0" stroke-dasharray="4,4"/>
+  <text x="40" y="520" font-size="12" font-weight="600" fill="#15803d">Infrastructure Layer 基础设施层</text>
+
+  <!-- Infrastructure -->
+  <g transform="translate(60, 540)">
+    <rect x="0" y="0" width="110" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="25" text-anchor="middle" font-size="11" fill="#111827">Sandbox</text>
+    <text x="55" y="45" text-anchor="middle" font-size="9" fill="#6b7280">安全隔离</text>
+  </g>
+  <g transform="translate(190, 540)">
+    <rect x="0" y="0" width="110" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="25" text-anchor="middle" font-size="11" fill="#111827">Database</text>
+    <text x="55" y="45" text-anchor="middle" font-size="9" fill="#6b7280">会话存储</text>
+  </g>
+  <g transform="translate(320, 540)">
+    <rect x="0" y="0" width="110" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="25" text-anchor="middle" font-size="11" fill="#111827">Config</text>
+    <text x="55" y="45" text-anchor="middle" font-size="9" fill="#6b7280">配置管理</text>
+  </g>
+  <g transform="translate(450, 540)">
+    <rect x="0" y="0" width="110" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="25" text-anchor="middle" font-size="11" fill="#111827">Auth</text>
+    <text x="55" y="45" text-anchor="middle" font-size="9" fill="#6b7280">认证授权</text>
+  </g>
+  <g transform="translate(580, 540)">
+    <rect x="0" y="0" width="110" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="25" text-anchor="middle" font-size="11" fill="#111827">OpenAI API</text>
+    <text x="55" y="45" text-anchor="middle" font-size="9" fill="#6b7280">模型调用</text>
+  </g>
+  <g transform="translate(710, 540)">
+    <rect x="0" y="0" width="110" height="65" rx="6" fill="#ffffff" stroke="#d1d5db"/>
+    <text x="55" y="25" text-anchor="middle" font-size="11" fill="#111827">Cloud</text>
+    <text x="55" y="45" text-anchor="middle" font-size="9" fill="#6b7280">云端环境</text>
+  </g>
+
+  <!-- Arrows between layers -->
+  <line x1="480" y1="140" x2="480" y2="160" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+
+  <line x1="480" y1="340" x2="480" y2="360" stroke="#9333ea" stroke-width="1.5" marker-end="url(#arrow-purple)"/>
+
+  <line x1="480" y1="480" x2="480" y2="500" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- Side annotations -->
+  <g transform="translate(810, 250)">
+    <rect x="0" y="0" width="130" height="90" rx="6" fill="#fef3c7" stroke="#fcd34d"/>
+    <text x="65" y="20" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">数据流</text>
+    <line x1="10" y1="35" x2="50" y2="35" stroke="#2563eb" stroke-width="1.5"/>
+    <text x="65" y="38" font-size="9" fill="#6b7280">用户请求</text>
+    <line x1="10" y1="55" x2="50" y2="55" stroke="#9333ea" stroke-width="1.5"/>
+    <text x="65" y="58" font-size="9" fill="#6b7280">工具调用</text>
+    <line x1="10" y1="75" x2="50" y2="75" stroke="#16a34a" stroke-width="1.5"/>
+    <text x="65" y="78" font-size="9" fill="#6b7280">结果返回</text>
+  </g>
+
+  <g transform="translate(810, 400)">
+    <rect x="0" y="0" width="130" height="70" rx="6" fill="#e0e7ff" stroke="#c7d2fe"/>
+    <text x="65" y="20" text-anchor="middle" font-size="11" font-weight="600" fill="#3730a3">配置项</text>
+    <text x="65" y="40" text-anchor="middle" font-size="9" fill="#6b7280">AGENTS.md</text>
+    <text x="65" y="55" text-anchor="middle" font-size="9" fill="#6b7280">Skills / Rules</text>
+  </g>
+</svg>

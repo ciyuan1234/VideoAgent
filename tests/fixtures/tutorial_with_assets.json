@@ -1,0 +1,26 @@
+{
+  "story_profile": "tutorial",
+  "story_variant": "mechanism_first",
+  "content": {
+    "source_type": "file",
+    "title": "终端实操演示",
+    "raw_text": "本节通过录屏演示安装与运行步骤。",
+    "headings": [
+      "安装",
+      "运行"
+    ],
+    "bullets": [
+      "跟随录屏操作"
+    ],
+    "code_snippets": [],
+    "available_assets": [
+      {
+        "file": "terminal_demo.mp4",
+        "kind": "video",
+        "tags": [
+          "operation"
+        ]
+      }
+    ]
+  }
+}
