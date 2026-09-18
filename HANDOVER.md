@@ -14,6 +14,7 @@
 6. [单步调试与健康检查清单](#6-单步调试与健康检查清单)
 7. [素材优先导演模式](#7-素材优先导演模式当前版本交接重点)
 8. [质量门禁与回归评估](#8-质量门禁与回归评估)
+9. [多风格渲染层（竖屏发布会）](#9-多风格渲染层竖屏发布会)
 
 ---
 
@@ -415,3 +416,38 @@ python -m tests.update_snapshots
 - `tests/test_story_planner.py`：叙事结构差异、快照稳定、证据纪律、素材标签匹配。
 - `tests/test_quality_gate.py`：评分维度、阻断项、占位扣分、历史工程不强制。
 - `tests/test_release_gate.py`：占位与低质量阻断、`--allow-placeholders` 预览放行、`codex_tutorial` 兼容。
+
+---
+
+## 9. 多风格渲染层（竖屏发布会）
+
+`engine/launch_style.py` 是与经典横屏完全独立的渲染层，通过 `meta.style: "launch_teaser"` 激活。
+
+### 为什么不是「换主题」
+
+经典风格的坐标写死在横屏上（39 处硬编码坐标 + 59 处 `self.width/height` 依赖），单纯改配色或分辨率会让所有卡片错位。因此新风格不复用任何横屏布局代码，而是重新设计一套竖屏原语。
+
+| | 经典风格 | launch_teaser |
+| :--- | :--- | :--- |
+| 画布 | 1920×1080 横屏 | 1080×1920 竖屏 |
+| 背景 | 白底 / 深色网格 | 深空渐变 + 中心辉光 + 暗角 |
+| 版式 | 卡片、徽标、项目符号、节点框 | 巨型居中排版、细结构线、竖条编号 |
+| 角色 | 绘梨衣立绘 / 贴纸 | 无 |
+| 字幕 | 深色胶囊居中 | 细体居中 + 柔和投影 |
+| 转场 | `cut` / `slide_left` | `fade`（交叉溶解） |
+
+### 接入点
+
+- `VideoCompositor.__init__` 读取 `meta.style` 与 `meta.accent`。
+- `render_scene_frame()` 在风格为 `launch_teaser` 且 `visual.type` 属于 `LAUNCH_VISUALS` 时委派给 `launch_style.render()`。
+- `render_subtitle_pill()` 按风格分派：竖屏走 `launch_style.render_subtitle()`。
+- `validate_storyboard()` 把 `LAUNCH_VISUALS` 并入合法类型，并校验 `transition` 取值。
+- 背景按 `(宽, 高, 强调色)` 缓存，整片只生成一次；否则每帧重算渐变会显著拖慢渲染。
+
+### 扩展新风格的约定
+
+新增风格时请沿用同一模式：独立模块 + `STYLE_NAME` 常量 + `render()` 入口，在 `render_scene_frame()` 与 `render_subtitle_pill()` 各加一个分派分支，并把该风格的原语并入 `validate_storyboard()` 的合法类型集合。不要修改经典风格的布局常量，以免已有工程成片漂移。
+
+### 字体与度量
+
+CJK 字体解析已抽到 `engine/fonts.py`，文字宽度估算与截断在 `engine/text_metrics.py`，供内容层与画面层共用。

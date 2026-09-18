@@ -173,6 +173,8 @@ scenes:
 | **`image` + `presentation: cinematic`** | 软件截图 / 产品界面讲解 | `beats: [{at, focus, scale, callout, label}]` | 真实界面全屏主导，镜头随讲解在关键区域间推移并绘制聚焦标注 |
 | **`video_clip`** | 录屏 / Demo / 实拍素材 | `file`, `clip_fps`, `beats` | 将项目内 MP4 抽帧进缓存，按镜头节拍播放、推镜和标注，不再套进静态卡片 |
 
+> 上表为横屏开发者风格（默认）。需要手机竖屏发布会风格时改用 `meta.style: launch_teaser` 与 `hero` / `statement` / `feature_stack` / `closing` 四个原语，详见下文。
+
 ### 🎥 真实素材镜头节拍（Cinematic Beats）
 
 避免将真实截图压缩在“左文右图”卡片中。对 `image` 使用 `presentation: cinematic`，或直接使用 `video_clip`，让素材成为整幕主画面；`at` 为场景进度（0~1），其余坐标均为素材自身的归一化坐标：
@@ -226,8 +228,31 @@ camera:
 ### ✂️ 剪辑节奏与转场控制
 ```yaml
 transition: "cut"         # 硬切 (Hard Cut，0帧无缝切换，干脆利落)
-# 或 transition: "slide_left" (平滑横向滑动推镜)
+# transition: "slide_left"  # 平滑横向滑动推镜 (12 帧)
+# transition: "fade"        # 交叉溶解 (15 帧)，适合发布会预告等柔和衔接
 ```
+
+### 📱 发布会竖屏风格 (launch_teaser)
+
+当 `meta.style: "launch_teaser"` 时，渲染切换到完全独立的竖屏视觉语言：画布 `[1080, 1920]` 深空渐变 + 中心辉光 + 暗角，巨型居中排版与细结构线，无卡片、无徽标、无主讲人立绘；字幕改为细体居中 + 柔和投影，不使用深色胶囊。
+
+```yaml
+meta:
+  resolution: [1080, 1920]
+  style: "launch_teaser"
+  accent: "indigo"          # indigo / violet / cyan / amber
+scenes:
+  - id: "hero"
+    camera: {motion: "zoom_in"}
+    audio: {text: "Gemini 4.0，正式发布。"}
+    visual:
+      type: "hero"          # 开场：kicker + 巨型标题 + 强调线 + 副标题
+      kicker: "GOOGLE DEEPMIND"
+      title: "Gemini 4.0"
+      subtitle: "正式发布"
+```
+
+该风格原生提供四个竖屏原语：`hero`（开场锁定）、`statement`（大字号观点句，支持 `lines` + `highlight`）、`feature_stack`（左侧竖条编号列表）、`closing`（收束锁定 + 页脚）。它们只在 `launch_teaser` 风格下可用，不可与经典横屏原语混用。
 
 ---
 

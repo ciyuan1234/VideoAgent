@@ -323,6 +323,39 @@ python -m tests.update_snapshots
 
 ---
 
+## 📱 第二套风格：发布会竖屏 (launch_teaser)
+
+同一套引擎可以输出与开发者卡片风格**完全独立**的竖屏视觉语言：`1080×1920` 深空渐变、中心辉光、巨型居中排版、细结构线与溶解转场，无卡片、无徽标、无主讲人立绘，字幕也改为细体居中加投影而非深色胶囊。
+
+```yaml
+meta:
+  resolution: [1080, 1920]
+  style: "launch_teaser"
+  accent: "indigo"        # indigo / violet / cyan / amber
+scenes:
+  - id: "hero"
+    camera: {motion: "zoom_in"}
+    audio: {text: "Gemini 4.0，正式发布。"}
+    visual:
+      type: "hero"
+      kicker: "GOOGLE DEEPMIND"
+      title: "Gemini 4.0"
+      subtitle: "正式发布"
+```
+
+竖屏原生提供四个原语：`hero`（开场锁定）、`statement`（大字号观点句，支持 `lines` + `highlight`）、`feature_stack`（左侧竖条编号列表）、`closing`（收束锁定 + 页脚）。它们只在 `launch_teaser` 风格下可用，不能与横屏原语混用。转场新增 `fade`（15 帧交叉溶解），与 `cut`、`slide_left` 并存。
+
+<p align="center">
+  <img src="projects/gemini_launch/dist/inspect/hero.png" width="24%" alt="Launch Hero" />
+  <img src="projects/gemini_launch/dist/inspect/statement.png" width="24%" alt="Launch Statement" />
+  <img src="projects/gemini_launch/dist/inspect/feature_stack.png" width="24%" alt="Launch Feature Stack" />
+  <img src="projects/gemini_launch/dist/inspect/closing.png" width="24%" alt="Launch Closing" />
+</p>
+
+> 示例工程 `projects/gemini_launch` 为风格样片：文案只覆盖发布事实与信息边界，**不包含未经官方确认的能力、数据或开放范围**，这些一律以官方公告为准。
+
+---
+
 ## 📦 依赖与环境
 
 ```bash

@@ -1,0 +1,102 @@
+meta:
+  title: "Gemini 4.0 发布"
+  resolution: [1080, 1920]      # 竖屏 9:16，手机优先
+  fps: 30
+  style: "launch_teaser"        # 发布片风格：与经典开发者卡片风格完全独立
+  accent: "indigo"
+  theme: "dark"
+  speaker: "erii"
+  story_beats:
+    - id: "hook"
+      intent: "宣布发布事实"
+      evidence_level: "external"
+      scene_id: "hero"
+    - id: "stance"
+      intent: "给出观看立场"
+      evidence_level: "derived"
+      scene_id: "statement"
+    - id: "disclaimer"
+      intent: "明确信息边界"
+      evidence_level: "derived"
+      scene_id: "feature_stack"
+    - id: "takeaway"
+      intent: "收束与强化记忆点"
+      evidence_level: "external"
+      scene_id: "closing"
+  bgm:
+    file: "bgm.mp3"
+    volume: 0.14
+    fade_in: 1.5
+    fade_out: 2.0
+  sfx:
+    enabled: true
+
+scenes:
+  - id: "hero"
+    transition: "cut"
+    camera:
+      motion: "zoom_in"
+    audio:
+      text: "Gemini 4.0，正式发布。"
+      speed: 1.0
+      pause: 0.5
+      emotion: "normal"
+    visual:
+      type: "hero"
+      accent: "indigo"
+      kicker: "GOOGLE DEEPMIND"
+      title: "Gemini 4.0"
+      subtitle: "正式发布"
+
+  - id: "statement"
+    transition: "fade"
+    camera:
+      motion: "zoom_in"
+    audio:
+      text: "又一个版本号，又一次新的起点。"
+      speed: 1.0
+      pause: 0.5
+      emotion: "normal"
+    visual:
+      type: "statement"
+      accent: "violet"
+      lines:
+        - "又一个版本号"
+        - "又一次新的起点"
+      highlight: 1
+
+  - id: "feature_stack"
+    transition: "fade"
+    camera:
+      motion: "zoom_in"
+    audio:
+      text: "具体能力、数据与开放范围，请以官方公告为准。"
+      speed: 1.0
+      pause: 0.5
+      emotion: "calm"
+    visual:
+      type: "feature_stack"
+      accent: "cyan"
+      header: "看片提示"
+      items:
+        - title: "发布事实"
+          sub: "以官方公告为准"
+        - title: "能力边界"
+          sub: "以官方公告为准"
+        - title: "可用范围"
+          sub: "以官方公告为准"
+
+  - id: "closing"
+    transition: "fade"
+    camera:
+      motion: "zoom_punch"
+    audio:
+      text: "这，就是 Gemini 4.0。"
+      speed: 1.0
+      pause: 0.5
+      emotion: "normal"
+    visual:
+      type: "closing"
+      accent: "indigo"
+      title: "Gemini 4.0"
+      footer: "正式发布"

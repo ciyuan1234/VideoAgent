@@ -124,8 +124,12 @@ def _check_beats(scene_id: str, visual: Dict[str, Any], narration: str,
     return issues, warnings
 
 
-def analyze_storyboard(spec: Dict[str, Any], frame_width: int = 1920) -> Dict[str, Any]:
+def analyze_storyboard(spec: Dict[str, Any], frame_width: int = None) -> Dict[str, Any]:
     """对剧本做画面层体检，返回阻断项与提示。"""
+    if frame_width is None:
+        # 竖屏成片必须按实际画布宽度判断安全线，不能写死 1920。
+        resolution = (spec.get("meta") or {}).get("resolution") or [1920, 1080]
+        frame_width = int(resolution[0])
     scenes = [scene for scene in (spec.get("scenes") or []) if isinstance(scene, dict)]
     issues: List[str] = []
     warnings: List[str] = []

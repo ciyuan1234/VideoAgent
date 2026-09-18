@@ -45,43 +45,9 @@ from engine.tts_engine import synthesize_speech
 from engine.code_card_engine import render_code_card
 from engine.diagram_engine import render_diagram
 
-# CJK 字体的跨平台候选：macOS 优先，其次常见 Linux 发行版路径。
-FONT_HEITI_CANDIDATES = (
-    "/System/Library/Fonts/STHeiti Medium.ttc",
-    "/System/Library/Fonts/Hiragino Sans GB.ttc",
-    "/System/Library/Fonts/PingFang.ttc",
-    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-    "/usr/share/fonts/opentype/noto/NotoSansCJKsc-Bold.otf",
-    "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
-    "/usr/share/fonts/truetype/arphic/uming.ttc",
-)
-FONT_LIGHT_CANDIDATES = (
-    "/System/Library/Fonts/STHeiti Light.ttc",
-    "/System/Library/Fonts/Hiragino Sans GB.ttc",
-    "/System/Library/Fonts/PingFang.ttc",
-    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-    "/usr/share/fonts/opentype/noto/NotoSansCJKsc-Regular.otf",
-    "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
-    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-)
-
-
-def _resolve_font(candidates, label):
-    """返回首个存在的字体文件；全部缺失时给出可操作的安装提示。"""
-    for candidate in candidates:
-        if os.path.isfile(candidate):
-            return candidate
-    print(
-        f"⚠️ 未找到可用{label}字体，中文可能无法渲染。\n"
-        f"   macOS: 系统自带 STHeiti/PingFang，通常无需处理。\n"
-        f"   Linux: sudo apt-get install fonts-noto-cjk 或 fonts-wqy-microhei\n"
-        f"   候选路径: {', '.join(candidates)}"
-    )
-    return candidates[0]
-
-
-FONT_HEITI = _resolve_font(FONT_HEITI_CANDIDATES, "标题")
-FONT_LIGHT = _resolve_font(FONT_LIGHT_CANDIDATES, "正文")
+from engine.fonts import FONT_HEITI, FONT_LIGHT
+from engine import launch_style
+from engine.launch_style import LAUNCH_VISUALS, STYLE_NAME as LAUNCH_STYLE_NAME
 
 # ----------------- EASING FUNCTIONS -----------------
 def ease_out_cubic(t):
@@ -176,6 +142,8 @@ class VideoCompositor:
         self.width, self.height = meta.get("resolution", [1920, 1080])
         self.fps = meta.get("fps", 30)
         self.theme = meta.get("theme", "white_grid")
+        self.style = meta.get("style", "classic")
+        self.accent = meta.get("accent", launch_style.DEFAULT_ACCENT)
         self.bgm_conf = meta.get("bgm", {"file": "bgm.mp3", "volume": 0.10, "fade_in": 1.5, "fade_out": 2.0})
         self.sfx_conf = meta.get("sfx", {"enabled": True})
 
@@ -191,6 +159,7 @@ class VideoCompositor:
     def validate_storyboard(self, allow_placeholders=False):
         """在启动昂贵的 TTS/逐帧渲染前，检查素材契约与镜头配置。"""
         errors, warnings = [], []
+        valid_transitions = {"cut", "hard_cut", "slide_left", "fade", "dissolve"}
         scenes = self.spec.get("scenes", [])
         profile = self.spec.get("meta", {}).get("story_profile")
         story_beats = self.spec.get("meta", {}).get("story_beats", [])
@@ -207,7 +176,7 @@ class VideoCompositor:
             "terminal", "terminal_mock", "cli", "git_diff", "diff", "custom_nodes", "code",
             "diagram", "image", "screenshot", "showcase", "diagram_or_image",
             "video_clip", "video", "clip", "asset_placeholder", "material_placeholder"
-        }
+        } | set(LAUNCH_VISUALS)
         visual_types = []
         for index, scene in enumerate(scenes, 1):
             scene_id = scene.get("id", f"scene_{index}") if isinstance(scene, dict) else f"scene_{index}"
@@ -217,6 +186,9 @@ class VideoCompositor:
             if not (scene.get("audio", {}).get("text") or scene.get("voice_text")):
                 errors.append(f"{scene_id}: 缺少 audio.text")
             visual = scene.get("visual", {})
+            transition = scene.get("transition")
+            if transition is not None and transition not in valid_transitions:
+                errors.append(f"{scene_id}: 不支持的 transition: {transition}（可选 {sorted(valid_transitions)}）")
             visual_type = scene.get("layout") or visual.get("type")
             if visual_type not in valid_types:
                 errors.append(f"{scene_id}: 不支持的 visual.type: {visual_type}")
@@ -360,9 +332,14 @@ class VideoCompositor:
             pause_sec = audio_conf.get("pause", 0.45)
             emotion = audio_conf.get("emotion", "normal")
             
-            # 转场模式: cut / hard_cut (0帧) 或 slide_left (12帧)
+            # 转场模式: cut/hard_cut (0帧)、fade/dissolve (15帧交叉溶解)、slide_left (12帧推镜)
             trans_mode = scene.get("transition", "slide_left")
-            trans_frames = 0 if trans_mode in ["cut", "hard_cut"] else 12
+            if trans_mode in ["cut", "hard_cut"]:
+                trans_frames = 0
+            elif trans_mode in ["fade", "dissolve"]:
+                trans_frames = 15
+            else:
+                trans_frames = 12
 
             scene_wav = os.path.join(audio_cache_dir, f"{scene_id}.wav")
             meta = synthesize_speech(
@@ -1798,7 +1775,11 @@ class VideoCompositor:
         v_conf = scene.get("visual", {})
         v_type = scene.get("layout") or v_conf.get("type", "title_card")
 
-        if v_type == "title_card":
+        if self.style == LAUNCH_STYLE_NAME and v_type in LAUNCH_VISUALS:
+            frame = launch_style.render(
+                scene, local_f, total_scene_frames, self.width, self.height, self.accent
+            )
+        elif v_type == "title_card":
             frame = self._render_title_card(scene, local_f, global_f)
         elif v_type in ["split_compare", "compare"]:
             frame = self._render_split_compare(scene, local_f, global_f)
@@ -1902,6 +1883,8 @@ class VideoCompositor:
         return node
 
     def render_subtitle_pill(self, frame, text, alpha, pop_progress=1.0, center_x=None):
+        if self.style == LAUNCH_STYLE_NAME:
+            return launch_style.render_subtitle(frame, text, alpha, self.width, self.height)
         if not text or alpha <= 0:
             return frame
         font = ImageFont.truetype(FONT_HEITI, 28)
@@ -2101,10 +2084,14 @@ class VideoCompositor:
                     f1 = self.render_scene_frame(prev_scene, item["duration_frames"] - 1, f, total_scene_frames=item["duration_frames"])
                     f2 = self.render_scene_frame(next_scene, 0, f, total_scene_frames=scene_timelines[idx + 1]["duration_frames"])
                     
-                    offset_x = int(trans_prog * self.width)
-                    frame = Image.new("RGB", (self.width, self.height))
-                    frame.paste(f1, (-offset_x, 0))
-                    frame.paste(f2, (self.width - offset_x, 0))
+                    if item.get("transition") in ["fade", "dissolve"]:
+                        # 交叉溶解：适合发布会预告等需要柔和衔接的题材
+                        frame = Image.blend(f1, f2, trans_prog)
+                    else:
+                        offset_x = int(trans_prog * self.width)
+                        frame = Image.new("RGB", (self.width, self.height))
+                        frame.paste(f1, (-offset_x, 0))
+                        frame.paste(f2, (self.width - offset_x, 0))
                     break
 
             if active_scene is None and not is_transition:
