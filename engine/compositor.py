@@ -1882,7 +1882,13 @@ class VideoCompositor:
         node = Image.new("RGBA", (w, h), (0, 0, 0, 0))
         draw = ImageDraw.Draw(node)
         draw.rounded_rectangle([0, 0, w, h], radius=16, fill=bg, outline=border, width=2)
-        
+
+        # 节点卡是固定宽度，文字必须按宽度截断，否则会溢出圆角边框。
+        from engine.text_metrics import fit_text_to_width
+
+        title = fit_text_to_width(title, w - 48, 24)
+        sub = fit_text_to_width(sub, w - 48, 20)
+
         font_t = ImageFont.truetype(FONT_HEITI, 24)
         font_s = ImageFont.truetype(FONT_LIGHT, 20)
         

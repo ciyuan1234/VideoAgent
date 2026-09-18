@@ -12,6 +12,7 @@ VideoAgent Visual QA
 
 from typing import Any, Dict, List, Tuple
 
+from engine.text_metrics import estimate_text_width, fit_text_to_width, max_chars_for_width
 from engine.tts_engine import split_sentences
 
 # 与 compositor.py 保持一致的布局常量。
@@ -24,11 +25,6 @@ CALLOUT_MIN_SIZE = 0.04
 LABEL_SAFE_MARGIN = 16
 
 CINEMATIC_VISUALS = {"image", "screenshot", "showcase", "diagram_or_image", "video_clip", "video", "clip"}
-
-
-def estimate_text_width(text: str, font_size: int) -> float:
-    """粗略估算渲染宽度：CJK 按整字号，ASCII 按半字号。"""
-    return sum(font_size if ord(ch) > 127 else font_size * 0.5 for ch in str(text))
 
 
 def estimate_subtitle_pill_width(narration: str) -> float:
@@ -64,14 +60,15 @@ def label_safe_width(narration: str, frame_width: int = 1920) -> float:
 
 def fit_label_to_width(label: str, max_width: float) -> str:
     """按估算宽度截断标签并追加省略号，保证渲染时不会压到字幕。"""
-    text = str(label or "")
-    if estimate_text_width(text, LABEL_FONT_SIZE) <= max_width:
-        return text
-    for cut in range(len(text) - 1, 0, -1):
-        candidate = text[:cut] + "…"
-        if estimate_text_width(candidate, LABEL_FONT_SIZE) <= max_width:
-            return candidate
-    return "…"
+    return fit_text_to_width(label, max_width, LABEL_FONT_SIZE)
+
+
+# 节点卡固定 320x150，标题字号 24、副标题字号 20，左右各留 24px 内边距。
+NODE_WIDTH = 320
+NODE_TITLE_FONT_SIZE = 24
+NODE_SUB_FONT_SIZE = 20
+NODE_PADDING = 24
+NODE_TEXT_BUDGET = NODE_WIDTH - NODE_PADDING * 2
 
 
 def _check_beats(scene_id: str, visual: Dict[str, Any], narration: str,
@@ -161,6 +158,20 @@ def analyze_storyboard(spec: Dict[str, Any], frame_width: int = 1920) -> Dict[st
         # 真实素材镜头靠 beats 运动，不算静止；其余场景既无运镜也无位移即为静态。
         if not has_camera and not has_beats and visual_type not in CINEMATIC_VISUALS:
             static_scenes.append(scene_id)
+
+        for index, node in enumerate(visual.get("nodes") or []):
+            if not isinstance(node, dict):
+                continue
+            budget = NODE_TEXT_BUDGET
+            title = str(node.get("title") or "")
+            sub = str(node.get("sub") or "")
+            if estimate_text_width(title, NODE_TITLE_FONT_SIZE) > budget:
+                warnings.append(
+                    f"{scene_id}.nodes[{index}]: 标题超宽（{title!r}），渲染时会被截断，建议压到 "
+                    f"{max_chars_for_width(budget, NODE_TITLE_FONT_SIZE)} 个汉字以内"
+                )
+            if estimate_text_width(sub, NODE_SUB_FONT_SIZE) > budget:
+                warnings.append(f"{scene_id}.nodes[{index}]: 副标题超宽，渲染时会被截断")
 
     if len(scenes) >= 3 and len(static_scenes) == len(scenes):
         issues.append(f"全片 {len(scenes)} 幕均为静态画面（既无 camera 也无 beats），观感等同幻灯片")

@@ -1,0 +1,200 @@
+meta:
+  title: VideoAgent - Agent 架构与创作指引规范：从证据理解技术
+  resolution:
+  - 1920
+  - 1080
+  fps: 30
+  theme: white_grid
+  speaker: erii
+  story_profile: code_walkthrough
+  story_variant: mechanism_first
+  story_beats:
+  - id: hook
+    intent: 提出材料中的核心问题
+    evidence_level: derived
+    scene_id: hook
+  - id: source
+    intent: 定位输入材料中的关键实现
+    evidence_level: source
+    scene_id: source
+  - id: mechanism
+    intent: 解释材料中已给出的对象关系
+    evidence_level: derived
+    scene_id: mechanism
+  - id: runtime_evidence
+    intent: 验证运行时状态或结果
+    evidence_level: required
+    scene_id: runtime_evidence
+  - id: takeaway
+    intent: 回到真实项目中的验证动作
+    evidence_level: derived
+    scene_id: takeaway
+  production_style: material_first
+  content_evidence:
+    facts:
+    - 核心定位与设计原则
+    - 标准生产工作流
+    - '模式 A: 端到端全自动导演模式 (Auto-Generate, 0 介入)'
+    - '模式 B: 手动导演模式 (4 步法)'
+    - 1. 初始化独立工程
+    - 2. 编排分镜剧本 (`storyboard.yaml`)
+    metrics: []
+    source_type: file
+  bgm:
+    file: bgm.mp3
+    volume: 0.1
+    fade_in: 1.5
+    fade_out: 2.0
+  sfx:
+    enabled: true
+  quality_report:
+    score: 97
+    threshold: 75
+    enforced: true
+    passed: true
+    breakdown:
+      visual_diversity:
+        score: 20
+        max: 20
+        detail: 5 幕使用 4 种镜头，相邻重复 0 处
+      rhythm_variety:
+        score: 15
+        max: 15
+        detail: 主导转场占比 60%，角色出镜 2/5 幕，镜头运动 3 处 / 2 种
+      evidence_integrity:
+        score: 25
+        max: 25
+        detail: 真实素材镜头 1 幕，占位 0 幕，素材请求 0 项
+      beat_coverage:
+        score: 20
+        max: 20
+        detail: 5 个节拍覆盖 5 种意图
+      narration_quality:
+        score: 17
+        max: 20
+        detail: 5 条台词，重复 0 条，超长句 1 处
+    blocking_issues: []
+    warnings:
+    - '以下场景没有任何位移，建议补 camera.motion: takeaway'
+    suggestions:
+    - 1 个句子超过 45 字，建议按呼吸点断句
+    - 当前最弱分项是 narration_quality（17/20）
+asset_requests: []
+scenes:
+- id: hook
+  character_mode: none
+  transition: slide_left
+  audio:
+    text: Sakura，今天从 VideoAgent - Agent 架构与创作指引规范 的真实材料出发，只讲可以验证的部分。
+    speed: 1.03
+    pause: 0.35
+    emotion: normal
+  camera:
+    motion: zoom_punch
+  character_sticker: erii_presenter
+  visual:
+    type: title_card
+    tag: 从证据出发
+    title: VideoAgent - Agent 架构与创作指引规范
+    subtitle: 先看问题，再看证据
+    bullets:
+    - 核心定位与设计原则
+    - 标准生产工作流
+    - '模式 A: 端到端全自动导演模式 (Auto-Generate, 0 介入)'
+- id: source
+  character_mode: none
+  transition: slide_left
+  audio:
+    text: 这段源码是机制落点；关注状态与控制流，不外推没有证据支持的结论。
+    speed: 1.0
+    pause: 0.35
+    emotion: calm
+  camera:
+    motion: zoom_in
+  visual:
+    type: code
+    header_title: 关键源码片段
+    header_sub: 来自输入材料
+    lang: bash
+    theme: OneHalfLight
+    spotlight_line: 1
+    code: '# 从技术主题直接生成并渲染出片
+
+      ./video-cli auto-generate <project_id> --topic "主题描述"
+
+
+      # 或从本地文件生成剧本（可配合 --no-build 仅生成剧本以便微调）
+
+      ./video-cli auto-generate <project_id> -f path/to/document.md --no-build'
+- id: mechanism
+  character_mode: none
+  transition: slide_left
+  audio:
+    text: 把材料中的关系展开，只解释已经给出的对象与步骤。
+    speed: 1.0
+    pause: 0.35
+    emotion: calm
+  camera:
+    motion: zoom_in
+  visual:
+    type: custom_nodes
+    header_title: 关键关系
+    header_sub: 由输入材料提炼
+    nodes:
+    - title: 1. 核心定位与设计原则
+      sub: 来自输入材料
+      theme: blue
+    - title: 2. 标准生产工作流
+      sub: 来自输入材料
+      theme: amber
+    - title: '3. 模式 A: 端到端全…'
+      sub: 来自输入材料
+      theme: green
+    - title: '4. 模式 B: 手动导演…'
+      sub: 来自输入材料
+      theme: white
+- id: runtime_evidence
+  character_mode: none
+  transition: cut
+  audio:
+    text: 现在切到真实素材，观察刚才的关键动作或结果。
+    speed: 1.0
+    pause: 0.35
+    emotion: normal
+  visual:
+    type: image
+    presentation: cinematic
+    file: operation_demo.png
+    beats:
+    - at: 0.0
+      focus:
+      - 0.5
+      - 0.45
+      scale: 1.04
+      label: 建立全局上下文
+      accent: indigo
+    - at: 0.55
+      focus:
+      - 0.5
+      - 0.7
+      scale: 1.28
+      label: 查看关键操作与结果
+      accent: emerald
+- id: takeaway
+  character_mode: none
+  transition: cut
+  audio:
+    text: 最后，把这条线索带回自己的项目验证；结论应该来自真实素材，而不是套用模板。
+    speed: 1.03
+    pause: 0.35
+    emotion: normal
+  character_sticker: erii_chibi_happy
+  visual:
+    type: title_card
+    tag: 下一步
+    title: 回到真实项目验证
+    subtitle: 补齐证据后再发布
+    bullets:
+    - 核心定位与设计原则
+    - 标准生产工作流
+    - '模式 A: 端到端全自动导演模式 (Auto-Generate, 0 介入)'

@@ -4,11 +4,17 @@
 
 import unittest
 
+import yaml
+
 from engine import story_planner as planner
 from engine.quality_gate import evaluate_storyboard
 from engine.visual_qa import analyze_storyboard, estimate_subtitle_pill_width, estimate_text_width
 
 from tests.support import load_fixture
+
+
+def yaml_dump_text(spec):
+    return yaml.dump(spec, allow_unicode=True, sort_keys=False)
 
 
 def scene(scene_id, visual, narration="这是用于画面体检的普通讲解台词。", **extra):
@@ -69,6 +75,36 @@ class VisualQaTest(unittest.TestCase):
         self.assertTrue(fitted.endswith("…"), fitted)
         # 未超宽的标签保持原样
         self.assertEqual(fit_label_to_width("查看关键操作", budget), "查看关键操作")
+
+    def test_node_text_never_overflows_card(self):
+        from engine.text_metrics import estimate_text_width, fit_text_to_width
+
+        fixture = load_fixture("concept.json")
+        spec = planner.build_storyboard(fixture["content"], "concept", "mechanism_first")
+        for item in spec["scenes"]:
+            for node in item.get("visual", {}).get("nodes") or []:
+                self.assertLessEqual(estimate_text_width(node["title"], 24), 272, node)
+                self.assertLessEqual(estimate_text_width(node["sub"], 20), 272, node)
+
+        # 渲染器兜底：任何超长输入都不会溢出卡片
+        self.assertLessEqual(estimate_text_width(fit_text_to_width("超长标题" * 10, 272, 24), 24), 272)
+
+    def test_emoji_from_source_does_not_reach_storyboard(self):
+        spec = planner.build_storyboard(
+            {
+                "title": "🎯 核心机制",
+                "raw_text": "机制说明",
+                "headings": ["⚡ 标准生产工作流", "🚀 端到端模式"],
+                "bullets": ["🎨 视觉资产"],
+                "code_snippets": [],
+            },
+            "concept",
+            "mechanism_first",
+        )
+        blob = yaml_dump_text(spec)
+        for glyph in ("🎯", "⚡", "🚀", "🎨"):
+            self.assertNotIn(glyph, blob)
+        self.assertIn("核心机制", blob)
 
     def test_callout_out_of_bounds_is_blocking(self):
         spec = {"scenes": [

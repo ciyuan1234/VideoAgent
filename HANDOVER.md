@@ -394,6 +394,14 @@ curl -s http://127.0.0.1:9880/control | grep -q "message" && echo "✅ GPT-SoVIT
 - `sample_scene_frames()` 按字数估算时长与逐句字幕并补画字幕（成片字幕是在 `build()` 的时间轴循环里叠加的），因此检查帧与成片一致。产物写入 `dist/inspect/qa/`，该目录已在 `.gitignore` 中排除；`dist/inspect/` 根目录只存放 README 引用的人工策展展示图，**不要**把抽帧直接写进根目录（曾因此误删过展示图）。
 - 历史工程（无 `story_profile`）只提示不阻断；新导演剧本的画面问题会并入质量报告的 `blocking_issues`。
 
+### 字体不支持的字形
+
+来源文档常拿 emoji 当标题装饰（`🎯 核心定位与设计原则`、`⚡ 标准生产工作流`），但 CJK 字体没有对应字形，渲染出来是豆腐块 `☐`。`story_planner.strip_unsupported_glyphs()` 会剔除表情、杂项符号、箭头、变体选择符与零宽连接符，并对标题、标题层级、要点统一生效。若将来要保留 emoji，需要改用带彩色字形的 emoji 字体并做回退链，而不是复用 STHeiti。
+
+### 固定尺寸容器
+
+节点卡固定 320x150、标题字号 24、副标题字号 20，可用宽度 272px（≈11 个汉字）。`_make_flow_node()` 会调用 `engine/text_metrics.fit_text_to_width()` 兜底截断；内容层在生成节点时也预先按同一预算裁剪，避免出现「必然被截断」的剧本。文字度量统一放在 `engine/text_metrics.py`，供内容层与画面层共用，避免层级互相依赖。
+
 ```bash
 # 全部用例（标准库 unittest，无需额外依赖）
 PYTHONPYCACHEPREFIX=/tmp/videoagent-pycache python -m unittest discover -s tests -t .

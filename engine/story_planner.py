@@ -11,6 +11,8 @@ VideoAgent Story Planner
 import re
 from typing import Any, Dict, List, Optional
 
+from engine.text_metrics import fit_text_to_width
+
 VALID_STORY_PROFILES = ("auto", "tutorial", "concept", "code_walkthrough", "decision")
 VALID_STORY_VARIANTS = ("auto", "evidence_first", "mechanism_first")
 
@@ -57,6 +59,23 @@ METRIC_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# 来源文档常用 emoji 做标题装饰，但 CJK 字体没有对应字形，渲染出来是豆腐块。
+UNSUPPORTED_GLYPH_PATTERN = re.compile(
+    "["
+    "\U0001F000-\U0001FAFF"  # 表情与象形符号
+    "\U00002600-\U000027BF"  # 杂项符号、装饰符号、箭头
+    "\U00002B00-\U00002BFF"  # 杂项符号与箭头
+    "\U00002190-\U000021FF"  # 箭头
+    "\uFE0F\u200D\u20E3"      # 变体选择符、零宽连接符、键帽
+    "]+"
+)
+
+
+def strip_unsupported_glyphs(text: str) -> str:
+    """移除当前字体无法绘制、会渲染成豆腐块的符号。"""
+    cleaned = UNSUPPORTED_GLYPH_PATTERN.sub(" ", str(text))
+    return re.sub(r"\s{2,}", " ", cleaned).strip()
+
 
 def extract_metrics(raw_text: str) -> List[Dict[str, Any]]:
     """只提取可复核的量化指标，排除变焦倍率、分辨率等无关数字。
@@ -83,10 +102,10 @@ def extract_metrics(raw_text: str) -> List[Dict[str, Any]]:
 
 def analyze_content_signals(content: Dict[str, Any]) -> Dict[str, Any]:
     """只提取可观测信号；绝不把缺失证据变成技术结论。"""
-    title = str(content.get("title", "技术主题"))
+    title = strip_unsupported_glyphs(content.get("title", "技术主题")) or "技术主题"
     raw_text = str(content.get("raw_text", ""))
-    headings = [str(item) for item in content.get("headings", [])]
-    bullets = [str(item) for item in content.get("bullets", [])]
+    headings = [strip_unsupported_glyphs(item) for item in content.get("headings", [])]
+    bullets = [strip_unsupported_glyphs(item) for item in content.get("bullets", [])]
     corpus = "\n".join([title, raw_text, *headings, *bullets]).lower()
     code_snippets = [item for item in content.get("code_snippets", []) if item.get("code")]
     keywords = {
@@ -270,8 +289,10 @@ def scene_from_beat(beat: Dict[str, Any], plan: Dict[str, Any]) -> Dict[str, Any
     title = signals["title"]
     beat_id = beat["id"]
     node_themes = ["blue", "amber", "green", "white"]
+    # 节点卡是固定 320x150，标题按可用宽度预裁，避免渲染期截断。
     nodes = [
-        {"title": f"{i + 1}. {fact[:18]}", "sub": "来自输入材料", "theme": node_themes[i]}
+        {"title": fit_text_to_width(f"{i + 1}. {fact}", 272, 24),
+         "sub": "来自输入材料", "theme": node_themes[i]}
         for i, fact in enumerate(facts[:4])
     ]
     base = {
