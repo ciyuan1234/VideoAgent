@@ -8,6 +8,10 @@ __pycache__/
 .cache/
 **/.cache/
 
+# Rendered deliverables: 只把轻量封面/截图留在版本库，成片走 Release 或对象存储
+**/dist/final.mp4
+**/dist/inspect/*.mp4
+
 # macOS system files
 .DS_Store
 .AppleDouble

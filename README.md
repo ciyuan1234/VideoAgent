@@ -17,7 +17,7 @@
 </p>
 
 <p align="center">
-  <b>只需输入任意技术主题、本地 Markdown、源码或博文链接，全自动萃取知识证据并交付 1080P/60FPS 科技风成片！</b>
+  <b>只需输入任意技术主题、本地 Markdown、源码或博文链接，全自动萃取知识证据并交付 1080P 科技风成片！</b>
 </p>
 
 <p align="center">
@@ -68,7 +68,7 @@ VideoAgent 专为**计算机底层、系统架构、云原生、编程语言**�
 
 | 维度 | 传统手工制作 | 普遍“PPT生成类”工具 | 🎬 **VideoAgent 方案** |
 | :--- | :--- | :--- | :--- |
-| **制作耗时** | 8 - 12 小时 / 期 | 15 - 30 分钟 / 期 | ⚡ **3 - 5 分钟端到端自动化出片** |
+| **制作方式** | 手工剪辑、逐帧对轴，反复返工 | 套模板填空，内容与数据无法核验 | ⚡ **声明式剧本驱动，编译渲染确定性可复现** |
 | **代码表现力** | 手动录屏，排版易错，模糊失真 | 机械贴图，毫无高亮与动效 | 💎 **Silicon 级高颜值语法高亮卡片** |
 | **架构图表现** | Draw.io 画图剪辑，枯燥静态 | 无原生架构图渲染能力 | 📊 **原生 Mermaid 自动绘制架构与时序图** |
 | **配音与音效** | 人工录音多次重录，或机械机械音 | 毫无断句停顿，语调呆板 | 🎙️ **32kHz GPT-SoVITS 录音棚级音色 + 智能呼吸停顿** |
@@ -81,7 +81,7 @@ VideoAgent 专为**计算机底层、系统架构、云原生、编程语言**�
 
 ### 1. 🤖 端到端一键导演模式 (Zero-Click Auto-Director)
 输入任意技术主题、本地 Markdown / 源码，或技术博文链接，内置的内容提取器 (`content_extractor.py`) 会全自动：
-- **AST 级语法解析**：萃取最核心代码片段、关键函数与类调用；
+- **结构化语法提取**：按语言识别代码块、标题层级与要点清单；
 - **量化指标事实提炼**：自动识别 QPS、TPS、延迟 (ms)、吞吐量与内存占用等可观测硬指标；
 - **全流程自动驱动**：知识萃取 ➔ 叙事节拍编排 ➔ 剧本生成 ➔ 质量评分 ➔ 渲染出片，真正实现零摩擦交付。
 
@@ -90,7 +90,7 @@ VideoAgent 专为**计算机底层、系统架构、云原生、编程语言**�
 - **`tutorial`（实战教程）**：痛点切入 ➔ 环境配置 ➔ 核心运行 ➔ 关键代码 ➔ 避坑指南 ➔ 验证成果；
 - **`concept`（机制原理）**：痛点引入 ➔ 架构拆解 ➔ 核心原语 ➔ 运行流程 ➔ 总结拔高；
 - **`code_walkthrough`（源码走读）**：顶层数据结构 ➔ 核心驱动函数 ➔ 关键逻辑分支 ➔ 复杂度与边界；
-- **`decision`（技术选型）**：场景抉择 ➔ 多维基准测试 ➔ 对比矩阵 ➔ 权衡分析 ➔ 落地推荐。
+- **`decision`（技术选型）**：方案对比 ➔ 适用边界 ➔ 真实约束证据位 ➔ 收敛建议（缺证据时留素材位，不编造基准）。
 
 > 💡 **叙事变体**：支持 `--story-variant evidence_first`（证据与指标前置）与 `mechanism_first`（原理解析前置）。
 
@@ -122,8 +122,8 @@ VideoAgent/
 │   ├── auto_director.py         # 一键成片自动导演 (LLM 知识萃取与故事映射)
 │   ├── story_planner.py         # 确定性叙事节拍规划器 (支持 4 种专业叙事模式)
 │   ├── quality_gate.py          # 5 维剧本确定性质量门禁 (及格线 75 分拦截)
-│   ├── content_extractor.py     # 技术文档 AST、代码块与性能指标事实提取器
-│   ├── tts_engine.py            # GPT-SoVITS 专属配音合成 (毫秒级断句与时间戳)
+│   ├── content_extractor.py     # 技术文档标题、代码块与要点结构化提取器
+│   ├── tts_engine.py            # GPT-SoVITS 专属配音合成 (断句、呼吸停顿与时间戳)
 │   ├── code_card_engine.py      # Silicon 级极简高颜值代码卡片渲染
 │   ├── diagram_engine.py        # Mermaid CLI 架构与时序流程图生成
 │   ├── media_engine.py          # 外部视频切片与素材精准截取
@@ -192,7 +192,7 @@ npm install -g @mermaid-js/mermaid-cli
 构建完成后，直接在目标工程目录下取走你的 1080P 成片：
 ```bash
 # 在 projects/goroutine_gmp/dist/ 目录下查收：
-# ├── final.mp4      (1080P/60FPS 最终成片)
+# ├── final.mp4      (1080P / 30FPS 最终成片，fps 由 meta.fps 决定)
 # ├── cover.png      (高清视频封面)
 # └── subtitles.srt  (高精度外挂字幕)
 open projects/goroutine_gmp/dist/final.mp4
@@ -253,12 +253,12 @@ scenes:
 
 | 命令 | 用途 | 典型参数示例 |
 | :--- | :--- | :--- |
-| `auto-generate` | **端到端一键成片** | `./video-cli auto-generate demo --topic "epoll" -m gemini-1.5-flash` |
+| `auto-generate` | **端到端一键成片** | `./video-cli auto-generate demo --topic "epoll" --model gemini-1.5-flash` |
 | `init` | 初始化新建视频工程骨架 | `./video-cli init my_video --title "Rust入门指南"` |
 | `validate` | 剧本质量门禁与素材依赖校验 | `./video-cli validate my_video` |
 | `build` | 编译渲染成 1080P 高清成片 | `./video-cli build my_video` |
 | `list` | 查看当前工作区所有工程状态 | `./video-cli list` |
-| `status` | 查看指定工程详细元信息与用时 | `./video-cli status my_video` |
+| `status` | 查看指定工程标题、幕数与交付状态 | `./video-cli status my_video` |
 | `clean` | 安全清理中间构建音频与帧缓存 | `./video-cli clean my_video` |
 
 ---
@@ -268,20 +268,46 @@ scenes:
 运行 `validate` 或 `build` 时，系统会自动执行质量门禁诊断：
 
 ```text
-============================================================
-🎬 VideoAgent Quality Gate 质量评估报告
-============================================================
-📊 综合评分: 88 / 100 (及格线: 75) -> [PASS 允许发布]
-
-- 镜头多样性 (Visual Diversity) : 18 / 20 [优秀]
-- 节奏律动感 (Rhythm Variety)   : 14 / 15 [极佳]
-- 事实证据链 (Evidence Integrity): 22 / 25 [达标]
-- 节拍完整度 (Beat Coverage)    : 18 / 20 [完整]
-- 口播可读性 (Narration Quality): 16 / 20 [自然]
-============================================================
+🔎 剧本预检: projects/demo
+  ⚠️ 待补录素材: extra_assets/runtime_evidence.mp4（展示关键操作、状态变化或运行结果）
+🔬 剧本质量评估:
+  • 质量评分: 92/100 (门槛 75)
+      - visual_diversity: 20/20 · 6 幕使用 5 种镜头，相邻重复 0 处
+      - rhythm_variety: 14/15 · 主导转场占比 67%，角色出镜 2/6 幕，镜头运动 4 处 / 2 种
+      - evidence_integrity: 18/25 · 真实素材镜头 0 幕，占位 1 幕，素材请求 1 项
+      - beat_coverage: 20/20 · 6 个节拍覆盖 6 种意图
+      - narration_quality: 20/20 · 6 条台词，重复 0 条，超长句 0 处
+      ⚠️ 仍有素材占位场景: runtime_evidence
+      💡 当前最弱分项是 evidence_integrity（18/25）
 ```
 
-> 若评分低于 75 分，系统会自动给出针对性修改建议并阻止渲染，确保发布的每一期视频都保持顶尖水准。内部预览时可加 `--allow-low-quality`。
+> 上例输出为真实运行结果（以本 README 自身为输入）。若评分低于 75 分或存在阻断项，`validate` 返回失败、`build` 抛错且不进入渲染；内部预览时可加 `--allow-low-quality`。
+
+---
+
+## 🧪 回归测试
+
+```bash
+# 30 个用例：四类叙事结构快照、指标提取纪律、素材匹配、发布门禁与历史工程兼容
+python -m unittest discover -s tests -t .
+
+# 有意调整生成结果并确认无误后，重建快照基线
+python -m tests.update_snapshots
+```
+
+`tests/fixtures/` 存放固定输入，`tests/snapshots/` 存放剧本指纹基线（profile、variant、节拍、场景 id、镜头序列、素材请求与 evidence 标记），不含任何二进制产物。
+
+---
+
+## 📦 依赖与环境
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt          # Pillow / numpy / requests / PyYAML
+brew install ffmpeg silicon mermaid-cli yt-dlp   # 渲染所需外部二进制
+```
+
+语音合成需本地 GPT-SoVITS 服务（默认 `127.0.0.1:9880`），见 `start_service.sh`。`video-cli` 与 `engine/*.py` 的 shebang 指向本机 GPT-SoVITS 虚拟环境解释器，换机器时需调整，或改用 `python engine/cli.py ...`。
 
 ---
 

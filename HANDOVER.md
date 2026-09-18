@@ -165,6 +165,23 @@ sequenceDiagram
 
 当视频生成失败或中断时，请依序检查以下核心节点：
 
+### ✅ 前置：依赖自检
+
+Python 依赖已登记在 `requirements.txt`（Pillow / numpy / requests / PyYAML）；渲染还需要 ffmpeg、silicon、mmdc、yt-dlp 四个外部二进制，以及本地 GPT-SoVITS 服务：
+
+```bash
+# Python 依赖
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+
+# 外部二进制（macOS）
+brew install ffmpeg silicon mermaid-cli yt-dlp
+
+# 一键核对
+which ffmpeg ffprobe silicon mmdc yt-dlp && echo "✅ 核心二进制工具就绪"
+```
+
+> 注意：`video-cli` / `engine/*.py` 的 shebang 当前指向本地 GPT-SoVITS 虚拟环境解释器。换机器时需要改成本机可用路径，或直接用 `python engine/cli.py ...` 调用。
+
 ### 🚨 故障 1：TTS 报错或提示连接被拒绝 (`Connection refused`)
 - **现象**：`requests.exceptions.ConnectionError: HTTPConnectionPool(host='127.0.0.1', port=9880)`
 - **原因**：本地 GPT-SoVITS 后台推理服务挂掉或未启动。
@@ -299,6 +316,21 @@ curl -s http://127.0.0.1:9880/control | grep -q "message" && echo "✅ GPT-SoVIT
 - `--story-variant mechanism_first|evidence_first` 仅改变节拍次序，不能改变事实、证据或结论。预检会要求 `meta.story_beats` 与 scenes 一一对应，并拒绝无 evidence 的图表、终端或 Diff。
 - 素材按 tag/文件名匹配：`operation`、`code`、`architecture`、`metrics`。没有匹配素材时必须保留 `asset_placeholder`，发布构建会拒绝该剧本。
 
+### 指标提取纪律（`extract_metrics`）
+
+只有无歧义单位才能独立证明「这是可复核的量化指标」：
+
+- **强单位**（可直接采信）：`QPS`、`TPS`、`RPS`、`ms`、`MB`、`GB`、`KB`、`%`。
+- **歧义单位**（必须邻近性能语境）：`x`、`倍`。语境词见 `METRIC_CONTEXT_WORDS`（压测、基准、吞吐、延迟、提升、降低等），窗口为命中位置前后 24 字符。
+- `1920x1080` 这类分辨率会先被 `RESOLUTION_PATTERN` 剥离。
+- 生成图表还需同时满足：指标数 ≥ 2，且其中至少一个是强单位。
+
+> 历史故障：`1.0x -> 1.08x` 这样的**镜头变焦倍率**曾被当作性能指标，渲染出标题为「材料提供的数据」的对比柱状图。这正是本项目要避免的"用无关数字伪装证据"。`tests/test_story_planner.py::test_zoom_and_resolution_are_not_treated_as_metrics` 是该问题的回归用例。
+
+### 运镜分配
+
+规划器按节拍意图分配 `camera.motion`，避免全片静止：`hook` 用 `zoom_punch`（开场冲击），`source` / `mechanism` / `workflow` / `metrics` / `comparison` 用 `zoom_in`（讲解推进）；真实素材镜头与收束镜头不加 `camera`，前者由 `beats` 自行运动，后者保持安静。质量门禁会检查镜头运动是否缺失或高度单一。
+
 ### 验收路径
 
 ```bash
@@ -332,12 +364,12 @@ curl -s http://127.0.0.1:9880/control | grep -q "message" && echo "✅ GPT-SoVIT
 | 分项 | 满分 | 评估内容 |
 | :--- | ---: | :--- |
 | `visual_diversity` | 20 | 镜头原语种类占比，以及相邻场景是否重复同一原语 |
-| `rhythm_variety` | 15 | 主导转场占比、角色出镜比例、镜头运动是否单一 |
+| `rhythm_variety` | 15 | 主导转场占比（6）、角色出镜比例（5）、镜头运动设计（4） |
 | `evidence_integrity` | 25 | 图表/终端/Diff 是否有 `evidence`、占位场景数量、真实素材占比 |
 | `beat_coverage` | 20 | `meta.story_beats` 是否存在、是否与 scenes 一一对应、意图是否多样 |
 | `narration_quality` | 20 | 台词重复、超长句、过短台词、相同开场句式 |
 
-总分 100，默认门槛 75。
+总分 100，默认门槛 75。镜头运动分项：无任何 `camera` 配置得 2/4，≥3 处运动但全为同一种得 1/4，混合运动得 4/4——早期版本在完全没有运镜时也给满分，已修正。
 
 ### 阻断规则
 
@@ -360,7 +392,7 @@ PYTHONPYCACHEPREFIX=/tmp/videoagent-pycache python -m unittest discover -s tests
 python -m tests.update_snapshots
 ```
 
-- `tests/fixtures/`：六组固定输入（教程、原理、源码走读、选型、含数值原理、含录屏教程）。
+- `tests/fixtures/`：七组固定输入（教程、原理、源码走读、选型、含数值原理、含录屏教程、含歧义数字的对照样本）。
 - `tests/snapshots/`：剧本指纹基线，只记录 profile、variant、节拍、场景 id、镜头序列、素材请求与 evidence 标记，不含二进制品。
 - `tests/test_story_planner.py`：叙事结构差异、快照稳定、证据纪律、素材标签匹配。
 - `tests/test_quality_gate.py`：评分维度、阻断项、占位扣分、历史工程不强制。

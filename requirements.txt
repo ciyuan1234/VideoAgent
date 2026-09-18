@@ -1,0 +1,19 @@
+# VideoAgent Python 依赖（Python 3.10+）
+#
+# 安装：
+#   python3 -m venv .venv && source .venv/bin/activate
+#   pip install -r requirements.txt
+#
+# 注意：本文件只覆盖 Python 依赖。渲染管线还依赖以下外部二进制，
+# 请另行安装（macOS: brew install ...）：
+#   ffmpeg / ffprobe   视频合成与压制（必装）
+#   silicon            代码卡片高亮渲染（code 分镜需要）
+#   mmdc               Mermaid CLI，架构图渲染（diagram 分镜需要）
+#   yt-dlp             外部视频素材切片（media_engine 需要）
+# 语音合成还需要本地 GPT-SoVITS 服务（默认 127.0.0.1:9880），
+# 见 start_service.sh 与 HANDOVER.md 第 4 节。
+
+Pillow>=10.0,<11
+numpy>=1.24,<2
+requests>=2.28
+PyYAML>=6.0

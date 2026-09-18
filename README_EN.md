@@ -5,7 +5,7 @@
 # 🎬 VideoAgent
 
 ### AI-Native Tech Video Production Studio for Apple Silicon & Developers
-**Automated 1080P/60FPS Technical Video Generation Pipeline Powered by LLMs & Apple Silicon**
+**Automated 1080P Technical Video Generation Pipeline Powered by LLMs & Apple Silicon**
 
 <p align="center">
   <a href="https://github.com/ciyuan1234/VideoAgent"><img src="https://img.shields.io/github/stars/ciyuan1234/VideoAgent?style=flat-square&logo=github&color=FF6B6B" alt="GitHub Stars"></a>
@@ -81,7 +81,7 @@ Traditional tech video creation takes grueling effort:
 
 ### 1. 🤖 Zero-Click Auto-Director
 Feed in any technical topic, local Markdown / source code, or online blog URL. The built-in `content_extractor.py` handles:
-- **AST Code Extraction**: Pinpoint core structs, methods, and logic branches.
+- **Structured Code Extraction**: Pull code blocks, heading hierarchy, and key bullet points.
 - **Empirical Metric Harvesting**: Extract real QPS, TPS, latency (ms), throughput, and memory measurements.
 - **Automated Workflow**: Knowledge extraction ➔ Narrative beat planning ➔ Storyboard compilation ➔ Quality check ➔ High-res rendering.
 
@@ -115,7 +115,7 @@ VideoAgent/
 │   ├── auto_director.py         # End-to-end auto director
 │   ├── story_planner.py         # Deterministic narrative beat planner (4 profiles)
 │   ├── quality_gate.py          # 5-Dimensional quality evaluation gate (threshold 75)
-│   ├── content_extractor.py     # AST, code snippet, and metric extractor
+│   ├── content_extractor.py     # Heading, code snippet, and bullet extractor
 │   ├── tts_engine.py            # GPT-SoVITS speech synthesis with timestamp alignment
 │   ├── code_card_engine.py      # Silicon code card renderer
 │   ├── diagram_engine.py        # Mermaid CLI diagram generator
@@ -176,7 +176,7 @@ npm install -g @mermaid-js/mermaid-cli
 ./video-cli auto-generate redis_guide -u "https://redis.io/docs/latest/operate/oss_and_stack/management/optimization/latency-monitor/"
 ```
 
-Your 1080P/60FPS video, cover image, and subtitles are ready in `projects/<project_name>/dist/`!
+Your 1080P video, cover image, and subtitles are ready in `projects/<project_name>/dist/`!
 
 ---
 
@@ -184,7 +184,7 @@ Your 1080P/60FPS video, cover image, and subtitles are ready in `projects/<proje
 
 | Command | Description | Example |
 | :--- | :--- | :--- |
-| `auto-generate` | **End-to-end video creation** | `./video-cli auto-generate epoll --topic "Linux epoll" -m gemini-1.5-flash` |
+| `auto-generate` | **End-to-end video creation** | `./video-cli auto-generate epoll --topic "Linux epoll" --model gemini-1.5-flash` |
 | `init` | Scaffold a new project space | `./video-cli init my_topic --title "Understanding Redis"` |
 | `validate` | Run quality gate & check assets | `./video-cli validate my_topic` |
 | `build` | Render 1080P deliverables | `./video-cli build my_topic` |
