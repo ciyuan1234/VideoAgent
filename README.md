@@ -39,7 +39,9 @@
 
 VideoAgent 专为**计算机底层、系统架构、云原生、编程语言**等硬核技术选题打造，拥有工业级的高清渲染水准：
 
-### 🎨 经典工程封面与分镜 (1080P 交付产物)
+### 🎨 双风格视觉实况 (Horizontal & Vertical Showcases)
+
+#### 1. 🖥️ 16:9 极简白底网格科技风 (适合 B站 / YouTube 技术深度长视频)
 
 <p align="center">
   <img src="projects/codex_tutorial/dist/cover.png" width="48%" alt="Codex Tutorial Cover" />
@@ -50,30 +52,41 @@ VideoAgent 专为**计算机底层、系统架构、云原生、编程语言**�
   <img src="projects/redis_reactor/dist/cover.png" width="48%" alt="Redis Reactor Cover" />
 </p>
 
-### 🎬 影视级运镜与多图层动效实况 (Cinematic Scenes)
-
 <p align="center">
   <img src="projects/codex_tutorial/dist/inspect/cinematic_1.png" width="32%" alt="Cinematic Scene 1" />
   <img src="projects/codex_tutorial/dist/inspect/cinematic_2.png" width="32%" alt="Cinematic Scene 2" />
   <img src="projects/codex_tutorial/dist/inspect/cinematic_3.png" width="32%" alt="Cinematic Scene 3" />
 </p>
 
-> **✨ 视觉特性一览**：极简科技白底网格 • 动态高光语法高亮代码卡片 • 交互式 Mermaid 架构/时序图 • 绘梨衣专属看板娘呼吸微动效 • 像素级逐字对齐字幕 • 打击感微音效 (SFX) 与治愈 Lo-Fi BGM 智能混音。
+> **✨ 横屏视觉特性**：极简科技白底网格 • 动态高光语法高亮代码卡片 • 交互式 Mermaid 架构/时序图 • 绘梨衣看板娘呼吸微动效 • 像素级逐字对齐字幕 • 打击感微音效 (SFX) 与治愈 Lo-Fi BGM 智能混音。
+
+#### 2. 📱 9:16 电影感暗色发布会风格 `launch_teaser` (适合 抖音 / 小红书 / TikTok / Shorts)
+
+<p align="center">
+  <img src="projects/gemini_launch/dist/inspect/hero.png" width="23%" alt="Launch Hero" />
+  <img src="projects/gemini_launch/dist/inspect/statement.png" width="23%" alt="Launch Statement" />
+  <img src="projects/gemini_launch/dist/inspect/feature_stack.png" width="23%" alt="Launch Feature Stack" />
+  <img src="projects/gemini_launch/dist/inspect/closing.png" width="23%" alt="Launch Closing" />
+</p>
+
+> **✨ 竖屏视觉特性**：1080×1920 深空渐变 • 居中放射光晕 • 巨幅观点句 (statement) 动态高亮 • 细线条编号清单 (feature_stack) • 电影级 15 帧淡入溶解 (fade)。
 
 ---
 
-## 💡 为什么选择 VideoAgent？
+## 💡 竞品对比与生态定位 (Ecosystem Comparison)
 
-传统技术视频制作往往令人望而生畏：
+为什么已有 MoneyPrinterTurbo、VideoLingo 和 Manim，技术界依然渴望 **VideoAgent**？
 
-| 维度 | 传统手工制作 | 普遍“PPT生成类”工具 | 🎬 **VideoAgent 方案** |
-| :--- | :--- | :--- | :--- |
-| **制作方式** | 手工剪辑、逐帧对轴，反复返工 | 套模板填空，内容与数据无法核验 | ⚡ **声明式剧本驱动，编译渲染确定性可复现** |
-| **代码表现力** | 手动录屏，排版易错，模糊失真 | 机械贴图，毫无高亮与动效 | 💎 **Silicon 级高颜值语法高亮卡片** |
-| **架构图表现** | Draw.io 画图剪辑，枯燥静态 | 无原生架构图渲染能力 | 📊 **原生 Mermaid 自动绘制架构与时序图** |
-| **配音与音效** | 人工录音多次重录，或机械机械音 | 毫无断句停顿，语调呆板 | 🎙️ **32kHz GPT-SoVITS 录音棚级音色 + 智能呼吸停顿** |
-| **质量把控** | 完全凭创作者主观感觉 | 模板千篇一律，废话套话多 | 🛡️ **5 维确定性质量门禁 (低于75分自动拦截)** |
-| **隐私与成本** | 无 | 昂贵的 SaaS 月费与隐私外泄 | 🍎 **本地 Apple Silicon MPS 加速，零云端成本** |
+| 对比维度 | 🎬 **VideoAgent (本项目)** | 💸 **MoneyPrinterTurbo** | 🌐 **VideoLingo** | 📐 **Manim** |
+| :--- | :--- | :--- | :--- | :--- |
+| **核心应用定位** | **硬核技术/源码/架构视频自动化生成** | 泛娱乐/营销号短视频批量生成 | 现有外语视频汉化与双语字幕配音 | 数学公式与几何动画编程式渲染 |
+| **视觉呈现载体** | **Silicon 代码卡片 + 原生 Mermaid 架构图 + 极简网格** | Pexels / Pixabay 泛风景、生活空镜素材 | 原视频画面裁剪与字幕贴附 | 矢量几何、LaTeX 公式动态形变 |
+| **知识与数据纪律** | **硬指标约束 (QPS/延时/内存) + 真实源码 AST 提取** | 泛文案生成，无技术事实核验机制 | 依赖原视频已有内容，无法原创生成 | 纯数学逻辑，无文档知识提取引擎 |
+| **制作交互方式** | **声明式分镜 YAML + 一键导演端到端出片** | WebUI 输入主题关键词一键生成 | WebUI 上传视频/YouTube 链接一键处理 | 编写纯 Python 脚本逐帧计算坐标 |
+| **音频与音效流水线**| **32kHz 录音棚音色 + 智能呼吸停顿 + 节奏微音效 (SFX)** | 基础 Edge-TTS / 普通商用语音 | WhisperX 字幕分割 + CosyVoice 声音克隆 | 无原生配音管线（需外部挂载） |
+| **质量控制与门禁** | **5 维确定性评分 (低于 75 分直接拦截)** | 无质量门禁，输出稳定性依赖模型盲盒 | 人工在 UI 中逐句校对字幕 | 靠开发者手动调试视觉对齐 |
+| **成片风格覆盖** | **16:9 横屏深度长视频 + 9:16 竖屏发布会质感预告片** | 主要面向 9:16 移动端竖屏短视频 | 保持原视频比例与长宽比 | 默认 16:9 横屏视频 |
+| **本地加速与隐私** | **Apple Silicon MPS/Metal 硬件加速，零成本离线跑** | 依赖第三方商用 API 充值 | 本地 GPU 或云端 API | 本地 Python + FFmpeg 渲染 |
 
 ---
 
@@ -368,11 +381,67 @@ brew install ffmpeg silicon mermaid-cli yt-dlp   # 渲染所需外部二进制
 
 ---
 
+## ❓ 常见问题解答 (FAQ)
+
+<details>
+<summary><b>Q1: VideoAgent 需要付费购买云端 API 才能运行吗？</b></summary>
+<br/>
+<b>完全不需要！</b> VideoAgent 优先面向本地开发环境设计：
+<ul>
+  <li><b>知识提取与剧本编写</b>：支持本地 Ollama（如 Llama 3、DeepSeek、Qwen 等开源模型），也支持标准 OpenAI 兼容接口或 Gemini 免费层 API；</li>
+  <li><b>配音合成</b>：内置 GPT-SoVITS 专属服务，本地调用 <code>./start_service.sh</code> 即可合成 32kHz 录音棚级音色；</li>
+  <li><b>渲染与合成</b>：完全由本地 Python、FFmpeg 与 Silicon / Mermaid-cli 驱动，零云端渲染月费，且完全保护你的专有代码与私密文档。</li>
+</ul>
+</details>
+
+<details>
+<summary><b>Q2: 相比市面上的“AI 批量短视频生成器”，VideoAgent 有什么本质区别？</b></summary>
+<br/>
+市面上绝大部分短视频生成工具主要面向“泛娱乐营销号”，通过去素材库搜刮大量与内容弱相关的风景、生活空镜来拼接画面。<b>这类工具完全无法胜任计算机科学与硬核技术题材。</b><br/><br/>
+VideoAgent 专注于严肃技术传播：
+<ul>
+  <li><b>代码级颗粒度</b>：真实解析源码 AST 语法树，渲染高颜值代码卡片；</li>
+  <li><b>逻辑可视化</b>：原生将技术逻辑编译为 Mermaid 架构图与时序流程图；</li>
+  <li><b>严苛证据纪律</b>：强制提取 QPS、TPS、内存占用、时延等量化指标作为分镜支撑，绝不生成空洞废话。</li>
+</ul>
+</details>
+
+<details>
+<summary><b>Q3: 剧本质量门禁（Quality Gate）提示低于 75 分被拦截，该如何处理？</b></summary>
+<br/>
+质量门禁是 VideoAgent 保证成片工业级水准的独创机制。当运行 <code>validate</code> 或 <code>build</code> 分数低于 75 分时，终端会打印详尽的失分诊断（如：<i>缺少代码或运行证据、相邻镜头布局重复、单句台词超长缺乏停顿</i>）。<br/>
+你只需根据终端指引在 <code>storyboard.yaml</code> 中补齐缺失的原语或微调台词即可；若当前仅为快速验证草稿，可追加 <code>--allow-low-quality</code> 参数跳过门禁直接渲染。
+</details>
+
+<details>
+<summary><b>Q4: 可以替换自定义的主讲人形象与配音音色吗？</b></summary>
+<br/>
+<b>非常简单！</b>
+<ul>
+  <li><b>立绘形象</b>：将你的透明背景 PNG 图片放入 <code>assets/character/</code> 目录，并在剧本的 <code>character_sticker</code> 声明文件名即可；</li>
+  <li><b>音色基准</b>：将一段 5~10 秒的干净人声音频保存为 <code>assets/ref_audio.wav</code>，GPT-SoVITS 即可克隆出你的专属音色。</li>
+</ul>
+</details>
+
+<details>
+<summary><b>Q5: 生成的视频支持直接发布到各大视频平台吗？</b></summary>
+<br/>
+原生完美兼容！每次渲染完成后，工程目录的 <code>dist/</code> 会一键打包：
+<ul>
+  <li><code>final.mp4</code>：标准 H.264 / AAC 编码的高清视频（支持 16:9 横屏与 9:16 竖屏）；</li>
+  <li><code>cover.png</code>：高清对齐封面图；</li>
+  <li><code>subtitles.srt</code>：与音频毫秒级对齐的独立外挂字幕。可以直接拖拽上传至 B 站、YouTube、抖音、小红书等主流平台。</li>
+</ul>
+</details>
+
+---
+
 ## 🗺️ 路线图 (Roadmap)
 
 - [x] **v1.0**：解耦四层架构设计、Silicon 代码卡片、Mermaid 架构图与声明式图层合成
 - [x] **v1.2**：端到端“一键成片”自动导演模式与 4 大叙事结构引擎
 - [x] **v1.5**：5 维确定性剧本质量门禁拦截系统与快照回归测试
+- [x] **v1.8**：`launch_teaser` 竖屏发布会风格与画面布局体检系统
 - [ ] **v2.0 (规划中)**：
   - [ ] 桌面端交互式 WebUI 剧本可视化编排器
   - [ ] 更多风格看板娘与主讲人立绘角色库（赛博朋克、极客风、商务科技等）
@@ -388,6 +457,13 @@ brew install ffmpeg silicon mermaid-cli yt-dlp   # 渲染所需外部二进制
 2. 提交代码更改 (`git commit -m 'feat: Add some AmazingFeature'`)
 3. 推送分支 (`git push origin feature/AmazingFeature`)
 4. 提交 Pull Request
+
+<div align="center">
+  <br/>
+  <a href="https://github.com/ciyuan1234/VideoAgent/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=ciyuan1234/VideoAgent" alt="Contributors" />
+  </a>
+</div>
 
 ---
 

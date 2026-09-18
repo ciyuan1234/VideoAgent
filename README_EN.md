@@ -39,7 +39,9 @@
 
 Designed specifically for **systems programming, cloud-native architecture, kernel internals, and algorithmic deep-dives**:
 
-### 🎨 Rendered Covers & Posters (1080P Deliverables)
+### 🎨 Dual-Format Visual Showcases (Horizontal & Vertical)
+
+#### 1. 🖥️ 16:9 Minimalist Tech Grid (Optimized for YouTube / Bilibili Deep-Dives)
 
 <p align="center">
   <img src="projects/codex_tutorial/dist/cover.png" width="48%" alt="Codex Tutorial Cover" />
@@ -50,30 +52,41 @@ Designed specifically for **systems programming, cloud-native architecture, kern
   <img src="projects/redis_reactor/dist/cover.png" width="48%" alt="Redis Reactor Cover" />
 </p>
 
-### 🎬 Cinematic In-Video Frames
-
 <p align="center">
   <img src="projects/codex_tutorial/dist/inspect/cinematic_1.png" width="32%" alt="Cinematic Scene 1" />
   <img src="projects/codex_tutorial/dist/inspect/cinematic_2.png" width="32%" alt="Cinematic Scene 2" />
   <img src="projects/codex_tutorial/dist/inspect/cinematic_3.png" width="32%" alt="Cinematic Scene 3" />
 </p>
 
-> **✨ Visual Features**: Minimalist tech grid backdrop • Syntax-highlighted Silicon code cards • Native Mermaid architectural & sequence charts • Anime avatar micro-breathing animations • Subtitle sync aligned to pauses • Tactile SFX and curated Lo-Fi background music.
+> **✨ Landscape Highlights**: Crisp technical grid backdrop • Dynamic Silicon syntax-highlighted code cards • Interactive Mermaid architecture/flowcharts • Anime avatar micro-breathing motion • Word-level synced subtitles • Tactile sound effects (SFX) & relaxing Lo-Fi background music.
+
+#### 2. 📱 9:16 Cinematic Launch Teaser `launch_teaser` (Optimized for TikTok / Shorts / Reels)
+
+<p align="center">
+  <img src="projects/gemini_launch/dist/inspect/hero.png" width="23%" alt="Launch Hero" />
+  <img src="projects/gemini_launch/dist/inspect/statement.png" width="23%" alt="Launch Statement" />
+  <img src="projects/gemini_launch/dist/inspect/feature_stack.png" width="23%" alt="Launch Feature Stack" />
+  <img src="projects/gemini_launch/dist/inspect/closing.png" width="23%" alt="Launch Closing" />
+</p>
+
+> **✨ Portrait Highlights**: 1080×1920 Deep-space dark gradient • Radial center glow • Bold opinion statements with live highlight • Thin-line numbered feature stack • Broadcast-grade 15-frame cross-dissolve transitions.
 
 ---
 
-## 💡 Why VideoAgent?
+## 💡 Ecosystem Comparison
 
-Traditional tech video creation takes grueling effort:
+Why do developers need **VideoAgent** when tools like MoneyPrinterTurbo, VideoLingo, and Manim already exist?
 
-| Aspect | Traditional Manual Editing | Basic "Slide/PPT" Tools | 🎬 **VideoAgent** |
-| :--- | :--- | :--- | :--- |
-| **Turnaround Time** | 8 - 12 hours / episode | 15 - 30 minutes / episode | ⚡ **3 - 5 minutes zero-click generation** |
-| **Code Presentation** | Screen recording, blurry, prone to typos | Monotone static code screenshots | 💎 **Silicon-grade syntax highlighting cards** |
-| **Architecture Diagrams** | Draw.io tedious editing | No native diagram rendering | 📊 **Mermaid native architecture / sequence diagrams** |
-| **Voiceover & Audio** | Manual multi-takes or robotic voice | Monotonous, lacking natural pauses | 🎙️ **32kHz GPT-SoVITS studio voice + cadence pauses** |
-| **Quality Control** | Subjective, inconsistent | Generic clichés, empty fluff | 🛡️ **5-Dimensional Quality Gate (Intercepts below 75)** |
-| **Cost & Privacy** | High | Expensive SaaS subscription & privacy risk | 🍎 **Local Apple Silicon MPS acceleration, 0 cloud cost** |
+| Dimension | 🎬 **VideoAgent (This Project)** | 💸 **MoneyPrinterTurbo** | 🌐 **VideoLingo** | 📐 **Manim** |
+| :--- | :--- | :--- | :--- | :--- |
+| **Primary Focus** | **Hardcore Tech, Code, & Systems Video Production** | Generic viral short videos / Faceless reels | Localizing existing videos (Dubbing & Translation) | Mathematical formula animation & geometry |
+| **Visual Canvas** | **Silicon Code Cards + Mermaid Diagrams + Tech Grids** | Stock footage (Pexels / Pixabay nature/cityscapes) | Cropped source video + overlaid subtitle boxes | Vector transformations + LaTeX formula morphing |
+| **Evidence & Facts** | **AST Code Parsing + Metrics (QPS, ms latency, RAM)** | Creative writing, no fact verification | Restricted to source video transcript | Pure mathematical proofs, no doc extractor |
+| **Creation Paradigm**| **Declarative Storyboard YAML + 1-Click Auto Director** | WebUI topic prompt input | WebUI upload video / YouTube URL | Write Python code calculating exact coordinates |
+| **Voiceover & Audio**| **32kHz Studio Voice + Cadence Pauses + Micro SFX** | Standard Edge-TTS / generic speech | WhisperX segmentation + CosyVoice cloning | No native voiceover pipeline (must merge outside) |
+| **Quality Control**  | **5-Dimensional Quality Gate (Intercepts below 75 pts)** | None; output quality depends on LLM roll | Manual proofreading in UI | Manual visual tweaking |
+| **Aspect Ratios**    | **16:9 Landscape Deep-Dives + 9:16 Portrait Launch Teasers**| Mainly 9:16 vertical short videos | Preserves original video ratio | Default 16:9 horizontal |
+| **Hardware & Cost**  | **Apple Silicon MPS/Metal Acceleration, 100% Free & Local**| Third-party commercial API credits | Local GPU or cloud API | Local Python + FFmpeg |
 
 ---
 
@@ -194,16 +207,89 @@ Your 1080P video, cover image, and subtitles are ready in `projects/<project_nam
 
 ---
 
+## ❓ Frequently Asked Questions (FAQ)
+
+<details>
+<summary><b>Q1: Do I need to purchase expensive cloud APIs to run VideoAgent?</b></summary>
+<br/>
+<b>Not at all!</b> VideoAgent is designed local-first:
+<ul>
+  <li><b>Knowledge Extraction & Scripting</b>: Works with local Ollama models (e.g., Llama 3, DeepSeek, Qwen), standard OpenAI-compatible APIs, or free-tier Gemini API;</li>
+  <li><b>Voiceover Synthesis</b>: Bundles dedicated GPT-SoVITS inference (run <code>./start_service.sh</code>) to produce studio-grade 32kHz speech locally;</li>
+  <li><b>Rendering & Composition</b>: Purely executed on your local machine with hardware acceleration (Apple Silicon Metal / MPS), zero cloud rendering fees, and 100% private code protection.</li>
+</ul>
+</details>
+
+<details>
+<summary><b>Q2: How is VideoAgent different from generic "AI short video generators"?</b></summary>
+<br/>
+Most AI video generation tools are tailored for generic, viral social media clips, stitching unrelated stock nature or cityscape videos from stock platforms. <b>They fundamentally fail at technical or computer science topics.</b><br/><br/>
+VideoAgent is specifically engineered for developers:
+<ul>
+  <li><b>Code-Level Fidelity</b>: Parses real AST abstract syntax trees and renders syntax-highlighted Silicon cards;</li>
+  <li><b>Logic Visualization</b>: Automatically compiles technical flows into native Mermaid architecture and sequence diagrams;</li>
+  <li><b>Strict Evidence Discipline</b>: Extracts empirical measurements (QPS, TPS, memory, ms latency) as scene anchors, preventing hollow AI hallucinations.</li>
+</ul>
+</details>
+
+<details>
+<summary><b>Q3: What should I do if the Quality Gate rejects a storyboard below 75 points?</b></summary>
+<br/>
+The Quality Gate guarantees professional production quality. When running <code>validate</code> or <code>build</code>, if a score falls below 75, the terminal prints a granular diagnostic report (e.g., <i>missing runtime code evidence, repetitive consecutive camera layouts, or excessively long sentences lacking pauses</i>).<br/>
+Follow the recommendations to tweak <code>storyboard.yaml</code>. If you just want a quick draft preview, simply append <code>--allow-low-quality</code> to bypass the gate.
+</details>
+
+<details>
+<summary><b>Q4: Can I customize the presenter character and voice?</b></summary>
+<br/>
+<b>Very simple!</b>
+<ul>
+  <li><b>Character Avatars</b>: Place your transparent PNGs into <code>assets/character/</code> and declare the filename under <code>character_sticker</code> in the storyboard;</li>
+  <li><b>Voice Reference</b>: Save a 5–10s clean audio sample as <code>assets/ref_audio.wav</code>, and GPT-SoVITS will automatically clone your desired timbre.</li>
+</ul>
+</details>
+
+<details>
+<summary><b>Q5: Can the output videos be directly published to video platforms?</b></summary>
+<br/>
+Yes! Every build packages full deliverables in <code>dist/</code>:
+<ul>
+  <li><code>final.mp4</code>: Standard H.264 / AAC 1080P video (16:9 landscape or 9:16 portrait);</li>
+  <li><code>cover.png</code>: HD video thumbnail cover;</li>
+  <li><code>subtitles.srt</code>: Millisecond-accurate standalone subtitles. Ready to drag and drop onto YouTube, Bilibili, TikTok, or Reels.</li>
+</ul>
+</details>
+
+---
+
 ## 🗺️ Roadmap
 
 - [x] **v1.0**: 4-Layer decoupled architecture, Silicon code cards, Mermaid charts, multi-layer compositor.
 - [x] **v1.2**: Zero-click auto-director with 4 technical narrative structures.
 - [x] **v1.5**: 5-Dimensional deterministic quality gate & snapshot regression test suite.
+- [x] **v1.8**: `launch_teaser` portrait launch teaser style & visual QA layout check.
 - [ ] **v2.0 (In Progress)**:
   - [ ] Interactive WebUI storyboard editor.
   - [ ] Extended presenter avatar packs (Cyberpunk, Geek, Corporate).
   - [ ] Auto-upload plugins for YouTube, Bilibili, and TikTok/Reels.
   - [ ] Remotion modern frontend rendering backend.
+
+---
+
+## 🤝 Contributing
+
+Contributions are warmly welcome! Whether it's visual primitives, narrative templates, or documentation improvements:
+1. Fork the repository and create your branch (`git checkout -b feature/AmazingFeature`)
+2. Commit your changes (`git commit -m 'feat: Add some AmazingFeature'`)
+3. Push to the branch (`git push origin feature/AmazingFeature`)
+4. Open a Pull Request
+
+<div align="center">
+  <br/>
+  <a href="https://github.com/ciyuan1234/VideoAgent/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=ciyuan1234/VideoAgent" alt="Contributors" />
+  </a>
+</div>
 
 ---
 
