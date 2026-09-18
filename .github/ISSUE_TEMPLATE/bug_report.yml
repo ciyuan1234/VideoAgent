@@ -1,0 +1,35 @@
+name: 🐛 Bug 报告 (Bug Report)
+description: 提交 VideoAgent 在使用过程中遇到的异常或缺陷
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感谢你帮助改进 VideoAgent！请在提交 Bug 之前先检查是否有已存在的 Issue。
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: 问题描述 (Problem Description)
+      description: 发生了什么错误？请详细说明
+      placeholder: 例如：运行 ./video-cli auto-generate 时报错...
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: 复现步骤 (Steps to Reproduce)
+      description: 如何重现该问题？
+      placeholder: |
+        1. 执行 `./video-cli ...`
+        2. 查看输出...
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 运行环境 (Environment)
+      description: 你的机器与软件配置信息
+      value: |
+        - OS: macOS (Apple Silicon M1/M2/M3/M4) / Linux
+        - Python 版本: 3.10+
+        - FFmpeg 版本: 

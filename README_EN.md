@@ -10,6 +10,7 @@
 <p align="center">
   <a href="https://github.com/ciyuan1234/VideoAgent"><img src="https://img.shields.io/github/stars/ciyuan1234/VideoAgent?style=flat-square&logo=github&color=FF6B6B" alt="GitHub Stars"></a>
   <a href="https://github.com/ciyuan1234/VideoAgent/network/members"><img src="https://img.shields.io/github/forks/ciyuan1234/VideoAgent?style=flat-square&logo=github&color=4ECDC4" alt="GitHub Forks"></a>
+  <img src="https://img.shields.io/badge/Tests-46%20Passed-brightgreen?style=flat-square&logo=python&logoColor=white" alt="Tests Passed">
   <a href="https://github.com/ciyuan1234/VideoAgent/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python" alt="Python 3.10+"></a>
   <img src="https://img.shields.io/badge/Platform-macOS%20(Apple%20Silicon)%20%7C%20Linux-black?style=flat-square&logo=apple" alt="Platform">
@@ -118,6 +119,56 @@ Scores your storyboard from 0 to 100 before rendering. Intercepts any script bel
 
 ## 📂 Architecture
 
+### 🔄 End-to-End Pipeline
+
+```mermaid
+flowchart TD
+  classDef input fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0369a1;
+  classDef agent fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#b45309;
+  classDef engine fill:#f3e8ff,stroke:#9333ea,stroke-width:2px,color:#6b21a8;
+  classDef gate fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#991b1b;
+  classDef output fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#15803d;
+
+  subgraph S1 ["📥 1. Multi-Source Technical Input"]
+    A1["Hardcore Tech Topic<br/>--topic 'GMP Scheduler'"]:::input
+    A2["Local Source / Paper<br/>-f main.go / paper.md"]:::input
+    A3["Web Doc / Blog URL<br/>-u 'https://...'"]:::input
+  end
+
+  subgraph S2 ["🧠 2. Evidence & Knowledge Extraction"]
+    B1["AST Source Code Parser<br/>Pinpoint structs & loops"]:::agent
+    B2["Empirical Metric Harvesting<br/>QPS · Latency(ms) · RAM"]:::agent
+  end
+
+  subgraph S3 ["🎬 3. Narrative Planning & Storyboarding"]
+    C1["4 Professional Narrative Profiles<br/>tutorial · concept · code · decision"]:::agent
+    C2["Declarative Storyboard DSL<br/>storyboard.yaml"]:::agent
+  end
+
+  subgraph S4 ["🛡️ 4. Deterministic Quality Gate"]
+    D1{"Score >= 75 / 100?<br/>(Diversity/Rhythm/Evidence/Pacing)"}:::gate
+  end
+
+  subgraph S5 ["⚙️ 5. Multi-Layer Composition & TTS"]
+    E1["GPT-SoVITS 32kHz Studio Audio<br/>Cadence pauses · Subtitle sync"]:::engine
+    E2["Silicon Code Cards<br/>Syntax-highlighted beauty"]:::engine
+    E3["Mermaid CLI Architecture Diagrams<br/>Dynamic flow & sequence"]:::engine
+    E4["Multi-Layer Compositor<br/>Camera motion · Avatar breathing · SFX"]:::engine
+  end
+
+  subgraph S6 ["🎯 6. Deliverables Production"]
+    F1["1080P/60FPS Master Video<br/>final.mp4 (Landscape & Portrait)"]:::output
+    F2["Synced Subtitles<br/>subtitles.srt"]:::output
+    F3["HD Poster Cover<br/>cover.png"]:::output
+  end
+
+  S1 --> S2 --> S3 --> S4
+  D1 -- "PASS" --> S5 --> S6
+  D1 -- "REJECT (Below 75)" --> C2
+```
+
+### 🏛️ Four-Layer Decoupled Layout
+
 Decoupled into 4 clean layers for seamless human & AI agent collaboration:
 
 ```text
@@ -190,6 +241,55 @@ npm install -g @mermaid-js/mermaid-cli
 ```
 
 Your 1080P video, cover image, and subtitles are ready in `projects/<project_name>/dist/`!
+
+---
+
+## 📝 Declarative Storyboard (`storyboard.yaml`)
+
+Forget writing complex FFmpeg commands or tedious video timeline editing. You (or an AI Agent) simply declare your scene logic in YAML:
+
+<table>
+  <tr>
+    <th width="50%">📝 Declarative Spec (storyboard.yaml)</th>
+    <th width="50%">🎬 Compiled Rendered Deliverable</th>
+  </tr>
+  <tr>
+    <td>
+
+```yaml
+meta:
+  title: "Understanding Redis Event Loop"
+  speaker: "erii"
+  theme: "white_grid"
+  story_profile: "concept"
+  story_variant: "evidence_first"
+
+scenes:
+  - id: "code_analysis"
+    character_sticker: "erii_chibi_think"
+    audio:
+      text: "Let's inspect the core event loop handler aeProcessEvents."
+      speed: 1.0
+      pause: 0.3
+    visual:
+      type: "code_card"
+      lang: "c"
+      theme: "OneHalfLight"
+      title: "ae.c - Main Event Loop"
+      code: |
+        int aeProcessEvents(aeEventLoop *eventLoop, int flags) {
+            int processed = 0, numevents;
+            numevents = aeApiPoll(eventLoop, tvp);
+            // ...
+        }
+```
+
+</td>
+    <td align="center">
+      <img src="projects/codex_tutorial/dist/inspect/cinematic_1.png" width="100%" alt="Rendered Preview" />
+    </td>
+  </tr>
+</table>
 
 ---
 

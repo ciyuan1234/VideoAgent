@@ -10,6 +10,7 @@
 <p align="center">
   <a href="https://github.com/ciyuan1234/VideoAgent"><img src="https://img.shields.io/github/stars/ciyuan1234/VideoAgent?style=flat-square&logo=github&color=FF6B6B" alt="GitHub Stars"></a>
   <a href="https://github.com/ciyuan1234/VideoAgent/network/members"><img src="https://img.shields.io/github/forks/ciyuan1234/VideoAgent?style=flat-square&logo=github&color=4ECDC4" alt="GitHub Forks"></a>
+  <img src="https://img.shields.io/badge/Tests-46%20Passed-brightgreen?style=flat-square&logo=python&logoColor=white" alt="Tests Passed">
   <a href="https://github.com/ciyuan1234/VideoAgent/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square" alt="License"></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=flat-square&logo=python" alt="Python 3.10+"></a>
   <img src="https://img.shields.io/badge/Platform-macOS%20(Apple%20Silicon)%20%7C%20Linux-black?style=flat-square&logo=apple" alt="Platform">
@@ -125,6 +126,56 @@ VideoAgent 专为**计算机底层、系统架构、云原生、编程语言**�
 
 ## 📂 系统架构与解耦布局
 
+### 🔄 端到端流水线架构 (End-to-End Pipeline)
+
+```mermaid
+flowchart TD
+  classDef input fill:#e0f2fe,stroke:#0284c7,stroke-width:2px,color:#0369a1;
+  classDef agent fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#b45309;
+  classDef engine fill:#f3e8ff,stroke:#9333ea,stroke-width:2px,color:#6b21a8;
+  classDef gate fill:#fee2e2,stroke:#dc2626,stroke-width:2px,color:#991b1b;
+  classDef output fill:#dcfce7,stroke:#16a34a,stroke-width:2px,color:#15803d;
+
+  subgraph S1 ["📥 1. 多源技术输入 (Multi-Source Input)"]
+    A1["硬核技术主题<br/>--topic 'GMP调度器'"]:::input
+    A2["本地源码 / Markdown<br/>-f main.go / paper.md"]:::input
+    A3["技术博文 / 官方文档<br/>-u 'https://...'"]:::input
+  end
+
+  subgraph S2 ["🧠 2. 事实与证据萃取 (Content Extractor)"]
+    B1["AST 源码语法解析<br/>提取核心函数与结构体"]:::agent
+    B2["硬核度量指标提炼<br/>QPS · 延迟(ms) · 吞吐 · 内存"]:::agent
+  end
+
+  subgraph S3 ["🎬 3. 叙事规划与分镜编排 (Story Planner)"]
+    C1["4 大专业叙事模式<br/>tutorial · concept · code · decision"]:::agent
+    C2["声明式剧本 DSL<br/>storyboard.yaml"]:::agent
+  end
+
+  subgraph S4 ["🛡️ 4. 确定性质量门禁 (Quality Gate)"]
+    D1{"质量综合评分 >= 75?<br/>(镜头多样/节奏律动/证据纪律/口播呼吸)"}:::gate
+  end
+
+  subgraph S5 ["⚙️ 5. 多图层与音画合成引擎 (Compositor & TTS)"]
+    E1["GPT-SoVITS 32kHz 录音棚音色<br/>呼吸断句 · 逐字字幕对齐"]:::engine
+    E2["Silicon 级代码卡片<br/>高颜值语法高亮"]:::engine
+    E3["Mermaid CLI 架构图<br/>动态时序与流转流程"]:::engine
+    E4["多图层运镜渲染器<br/>运镜 · 气泡缓动 · 看板娘微动效 · SFX音效"]:::engine
+  end
+
+  subgraph S6 ["🎯 6. 工业级成果交付 (Deliverables)"]
+    F1["1080P/60FPS 最终成片<br/>final.mp4 (横屏 / 竖屏)"]:::output
+    F2["高精度对齐外挂字幕<br/>subtitles.srt"]:::output
+    F3["高清视频封面图<br/>cover.png"]:::output
+  end
+
+  S1 --> S2 --> S3 --> S4
+  D1 -- "PASS (通过)" --> S5 --> S6
+  D1 -- "REJECT (低于75分拦截并输出诊断)" --> C2
+```
+
+### 🏛️ 四层解耦工程布局 (Four-Layer Decoupled Architecture)
+
 项目采用**「引擎层 + 全局资产中台 + 独立工程空间 + 声明式剧本」**的四层解耦架构，为 AI Agent 和人类创作者提供清晰的分工边界：
 
 ```text
@@ -215,7 +266,15 @@ open projects/goroutine_gmp/dist/final.mp4
 
 ## 📝 声明式分镜剧本 (`storyboard.yaml`)
 
-无需编写复杂的音视频渲染与卡点代码，你（或 AI Agent）只需要以 YAML 声明每个分镜的台词与呈现内容：
+无需编写复杂的音视频渲染与卡点代码，你（或 AI Agent）只需要以 YAML 声明每个分镜的台词与呈现内容。**编译器自动完成精准卡点、动态高光、运镜与混音**：
+
+<table>
+  <tr>
+    <th width="50%">📝 声明式剧本 (storyboard.yaml)</th>
+    <th width="50%">🎬 渲染实况交付 (Rendered Frame)</th>
+  </tr>
+  <tr>
+    <td>
 
 ```yaml
 meta:
@@ -226,21 +285,6 @@ meta:
   story_variant: "evidence_first"
 
 scenes:
-  - id: "intro"
-    character_sticker: "erii_presenter"
-    audio:
-      text: "Sakura，今天我们来深入剖析 Redis 单线程为什么这么快！"
-      speed: 1.05
-      pause: 0.45
-    visual:
-      type: "title_card"
-      tag: "高性能系统架构"
-      title: "Redis 事件循环底层揭秘"
-      subtitle: "aeEventLoop 如何支撑 100,000+ QPS？"
-      bullets:
-        - "单线程 Reactor 反应器模式精髓"
-        - "文件事件与时间事件的高效分发"
-
   - id: "code_analysis"
     character_sticker: "erii_chibi_think"
     audio:
@@ -259,6 +303,13 @@ scenes:
             // ...
         }
 ```
+
+</td>
+    <td align="center">
+      <img src="projects/codex_tutorial/dist/inspect/cinematic_1.png" width="100%" alt="Rendered Preview" />
+    </td>
+  </tr>
+</table>
 
 ---
 
